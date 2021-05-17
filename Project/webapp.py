@@ -11,8 +11,6 @@ app.secret_key = 'xyz'
 ### defining dataframe/db
 user_db = pd.read_csv(r'database/user_db.csv')
 event_db = pd.read_csv(r'database/event_db.csv')
-print(user_db)
-print(event_db)
 
 
 ### defining routes
