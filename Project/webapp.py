@@ -35,12 +35,12 @@ def signup():
 #sign up funtion route
 @app.route('/signing_up', methods = ['post'])
 def signing_up():
-    signup_fname = request.form['sign-up_fname']
-    signup_lname = request.form['sign-up_lname']
-    signup_email = request.form['sign-up_email']
-    signup_phone = request.form['sign-up_phone']
-    signup_pswd1 = request.form['sign-up_pswd-1']
-    signup_pswd2 = request.form['sign-up_pswd-2']
+    signup_fname = request.form['sign_up-fname']
+    signup_lname = request.form['sign_up-lname']
+    signup_email = request.form['sign_up-email']
+    signup_phone = request.form['sign_up-phone']
+    signup_pswd1 = request.form['sign_up-pswd-1']
+    signup_pswd2 = request.form['sign_up-pswd-2']
     print(signup_fname + ' ' + signup_lname, signup_email, signup_phone, signup_pswd1, signup_pswd2)
     return '''<script>alert('Signing Up');window.location='/sign_up'</script>'''
 
