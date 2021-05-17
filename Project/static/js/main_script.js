@@ -1,4 +1,6 @@
-let pswd_fields = {'login-pswd': [false, 'login-switch-pswd']};
+let pswd_fields = {'login-pswd': [false, 'login-switch-pswd'],
+                    'sign_up-pswd-1': [false, 'sign_up-switch-pswd-1'],
+                    'sign_up-pswd-2': [false, 'sign_up-switch-pswd-2']};
 
 function showPassword(pswd_field_name)
 {

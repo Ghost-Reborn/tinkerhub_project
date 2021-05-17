@@ -8,15 +8,18 @@
     </head>
     <body>
         <form method="post" action="/sign_up">
-            <input type="text" placeholder="First Name" name="sign-up_fname">
-            <input type="text" placeholder="Last Name" name="sign-up_lname">
-            <input type="email" placeholder="Email" name="sign-up_email">
-            <input type="tel" placeholder="Phone" name="sign-up_phone">
-            <input type="password" placeholder="Password" name="sign-up_pswd-1">
-            <input type="password" placeholder="Confirm Password" name="sign-up_pswd-2">
+            <input type="text" placeholder="First Name" name="sign_up-fname">
+            <input type="text" placeholder="Last Name" name="sign_up-lname">
+            <input type="email" placeholder="Email" name="sign_up-email">
+            <input type="tel" placeholder="Phone" name="sign_up-phone">
+            <input type="password" placeholder="Password" name="sign_up-pswd-1" id="sign_up-pswd-1">
+            <span onclick="showPassword('sign_up-pswd-1')" id='sign_up-switch-pswd-1'>Show Password</span>
+            <input type="password" placeholder="Confirm Password" name="sign_up-pswd-2" id="sign_up-pswd-2">
+            <span onclick="showPassword('sign_up-pswd-2')" id='sign_up-switch-pswd-2'>Show Password</span>
             <input type="submit" value="Sign Up">
         </form>
         <span>Already have an account?</span>
         <a href="/">Login</a>
     </body>
 </html>
+<script src="{{ url_for('static', filename='js/main_script.js')}} "></script>
