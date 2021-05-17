@@ -14,7 +14,13 @@ def main():
 
 @app.route('/login', methods = ['post'])
 def login():
-    return '''<script>alert('Fail');window.location='/'</script>'''
+    login_email = request.form['login_email']
+    login_pswd = request.form['login_pswd']
+    return '''<script>alert('Logging In');window.location='/'</script>'''
+
+@app.route('/sign_up')
+def signing_up():
+    return '''<script>alert('Signing Up');window.location='/sign_up'</script>'''
 
 if __name__ == '__main__':
     app.run(debug=True)
