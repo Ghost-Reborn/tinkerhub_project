@@ -5,15 +5,17 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Event Manager - Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main_style.css') }}">
     </head>
     <body>
         <form method="post" action="/login">
-            <input type="email" placeholder="Email" name="login_email">
-            <input type="password" placeholder="Password" name="login_pswd">
+            <input type="email" placeholder="Email" name="login-email">
+            <input type="password" placeholder="Password" name="login-pswd" id="login-pswd">
+            <span onclick="showPassword('login-pswd')" id='login-switch-pswd'>Show Password</span>
             <input type="submit" value="Login">
         </form>
         <span>Don't have an account?</span>
         <a href="/sign_up">Sign Up</a>
     </body>
 </html>
+<script src="{{ url_for('static', filename='js/main_script.js') }}"></script>
