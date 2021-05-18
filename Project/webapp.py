@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.secret_key = 'xyz'
 
 ### defining dataframe/db
+global user_db, event_db
 user_db = pd.read_csv('database/user_db.csv')
 event_db = pd.read_csv('database/event_db.csv')
 
@@ -41,16 +42,23 @@ def signing_up():
     signup_phone = request.form['sign_up-phone']
     signup_pswd1 = request.form['sign_up-pswd-1']
     signup_pswd2 = request.form['sign_up-pswd-2']
-    print(user_db)
     if signup_pswd1!=signup_pswd2:
         return '''<script>alert('Passwords not Matching');window.location='/sign_up'</script>'''
     elif signup_pswd1==signup_pswd2:
-        data = [{'login_id': 0, 'fName': signup_fname, 'lName': signup_lname, 'email': signup_email,
+        global user_db
+        
+        if user_db.login_id.max()!=True:
+            next_uid = 0
+        else:
+            next_uid = user_db.login_id.max() + 1
+        data = [{'login_id': next_uid, 'fName': signup_fname, 'lName': signup_lname, 'email': signup_email,
                 'phone': signup_phone, 'password': signup_pswd1, 'profile_pic': 'None',
-                'events_reg': [], 'events_host': []}]
-        user_db.append(data, ignore_index=True, sort=False)
+                'events_reg': [], 'events_atnd': [], 'events_host': []}]
+        user_db = user_db.append(data, ignore_index=True, sort=False)
         print(user_db)
-        # user_db.to_csv('database/event_db.csv', index=False)
+        # user_db.to_csv('database/user_db.csv', index=False)
+        # user_db = pd.read_csv('database/user_db.csv')
+        # print(user_db)
         return '''<script>alert('Signing Up');window.location='/'</script>'''
     else:
         return '''<script>alert('Error');window.location='/sign_up'</script>'''
