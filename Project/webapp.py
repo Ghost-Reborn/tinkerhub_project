@@ -21,17 +21,27 @@ event_db = pd.read_csv('database/event_db.csv')
 def main():
     return render_template('login.html')
 
+#sign up page route
+@app.route('/sign_up')
+def signup():
+    return render_template('sign_up.html')
+
+#home page route
+@app.route('/home')
+def home():
+    return render_template('home.html')
+
 #login function route
 @app.route('/login', methods = ['post'])
 def login():
     login_email = request.form['login-email']
     login_pswd = request.form['login-pswd']
-    return '''<script>alert('Logging In');window.location='/'</script>'''
-
-#sign up page route
-@app.route('/sign_up')
-def signup():
-    return render_template('sign_up.html')
+    if login_email not in np.array(user_db.email):
+        return '''<script>alert('User not found');window.location='/'</script>'''
+    if str(user_db[user_db.email == login_email].password[0]) != login_pswd:
+        return '''<script>alert('Incorrect Password');window.location='/'</script>'''
+    else:
+        return '''<script>window.location='/home'</script>'''
 
 #sign up funtion route
 @app.route('/signing_up', methods = ['post'])
