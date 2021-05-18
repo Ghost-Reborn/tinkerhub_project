@@ -1,4 +1,5 @@
 ### importing libraries
+from collections import UserDict
 from flask import *
 import os
 import numpy as np
@@ -9,8 +10,8 @@ app = Flask(__name__)
 app.secret_key = 'xyz'
 
 ### defining dataframe/db
-user_db = pd.read_csv(r'database/user_db.csv')
-event_db = pd.read_csv(r'database/event_db.csv')
+user_db = pd.read_csv('database/user_db.csv')
+event_db = pd.read_csv('database/event_db.csv')
 
 
 ### defining routes
@@ -24,7 +25,6 @@ def main():
 def login():
     login_email = request.form['login-email']
     login_pswd = request.form['login-pswd']
-    print(login_email, login_pswd)
     return '''<script>alert('Logging In');window.location='/'</script>'''
 
 #sign up page route
@@ -41,8 +41,19 @@ def signing_up():
     signup_phone = request.form['sign_up-phone']
     signup_pswd1 = request.form['sign_up-pswd-1']
     signup_pswd2 = request.form['sign_up-pswd-2']
-    print(signup_fname + ' ' + signup_lname, signup_email, signup_phone, signup_pswd1, signup_pswd2)
-    return '''<script>alert('Signing Up');window.location='/sign_up'</script>'''
+    print(user_db)
+    if signup_pswd1!=signup_pswd2:
+        return '''<script>alert('Passwords not Matching');window.location='/sign_up'</script>'''
+    elif signup_pswd1==signup_pswd2:
+        data = [{'login_id': 0, 'fName': signup_fname, 'lName': signup_lname, 'email': signup_email,
+                'phone': signup_phone, 'password': signup_pswd1, 'profile_pic': 'None',
+                'events_reg': [], 'events_host': []}]
+        user_db.append(data, ignore_index=True, sort=False)
+        print(user_db)
+        # user_db.to_csv('database/event_db.csv', index=False)
+        return '''<script>alert('Signing Up');window.location='/'</script>'''
+    else:
+        return '''<script>alert('Error');window.location='/sign_up'</script>'''
 
 if __name__ == '__main__':
     app.run(debug=True)

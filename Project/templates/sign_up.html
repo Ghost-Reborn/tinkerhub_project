@@ -5,16 +5,17 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Event Manager - Sign Up</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{{ url_for('static', filename='css/main_style.css') }}" rel="stylesheet">
     </head>
     <body>
-        <form method="post" action="/sign_up">
-            <input type="text" placeholder="First Name" name="sign_up-fname">
+        <form method="post" action="/signing_up">
+            <input type="text" required placeholder="First Name" name="sign_up-fname">
             <input type="text" placeholder="Last Name" name="sign_up-lname">
-            <input type="email" placeholder="Email" name="sign_up-email">
-            <input type="tel" placeholder="Phone" name="sign_up-phone">
-            <input type="password" placeholder="Password" name="sign_up-pswd-1" id="sign_up-pswd-1">
+            <input type="email" required placeholder="Email" name="sign_up-email">
+            <input type="number" required pattern=".{10}" title="Password should contain atleast 8 characters"placeholder="Phone" name="sign_up-phone">
+            <input type="password" required pattern=".{8,}" title="Password should contain atleast 8 characters" placeholder="Password" name="sign_up-pswd-1" id="sign_up-pswd-1">
             <span onclick="showPassword('sign_up-pswd-1')" id='sign_up-switch-pswd-1'>Show Password</span>
-            <input type="password" placeholder="Confirm Password" name="sign_up-pswd-2" id="sign_up-pswd-2">
+            <input type="password" required placeholder="Confirm Password" name="sign_up-pswd-2" id="sign_up-pswd-2">
             <span onclick="showPassword('sign_up-pswd-2')" id='sign_up-switch-pswd-2'>Show Password</span>
             <input type="submit" value="Sign Up">
         </form>
