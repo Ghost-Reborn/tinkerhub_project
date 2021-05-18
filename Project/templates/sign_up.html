@@ -9,10 +9,10 @@
     </head>
     <body>
         <form method="post" action="/signing_up">
-            <input type="text" required placeholder="First Name" name="sign_up-fname">
+            <input type="text" required placeholder="First Name" autofocus name="sign_up-fname">
             <input type="text" placeholder="Last Name" name="sign_up-lname">
             <input type="email" required placeholder="Email" name="sign_up-email">
-            <input type="number" required pattern=".{10}" title="Password should contain atleast 8 characters"placeholder="Phone" name="sign_up-phone">
+            <input type="text" required pattern="[0-9]{10}" title="Please Enter your 10 digit Phone Number"placeholder="Phone" name="sign_up-phone">
             <input type="password" required pattern=".{8,}" title="Password should contain atleast 8 characters" placeholder="Password" name="sign_up-pswd-1" id="sign_up-pswd-1">
             <span onclick="showPassword('sign_up-pswd-1')" id='sign_up-switch-pswd-1'>Show Password</span>
             <input type="password" required placeholder="Confirm Password" name="sign_up-pswd-2" id="sign_up-pswd-2">
