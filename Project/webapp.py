@@ -46,8 +46,9 @@ def signing_up():
         return '''<script>alert('Passwords not Matching');window.location='/sign_up'</script>'''
     elif signup_pswd1==signup_pswd2:
         global user_db
-        
-        if user_db.login_id.max()!=True:
+        if (signup_email in np.array(user_db.email)):
+            '''<script>alert('Signing Up');window.location='/sign_up'</script>'''
+        if user_db.login_id.max()!=True and user_db.login_id.max()!=0:
             next_uid = 0
         else:
             next_uid = user_db.login_id.max() + 1
