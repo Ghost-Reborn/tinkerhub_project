@@ -1,1 +1,13 @@
-event_id,host_id,title,date_time,venue,max_participants,description,banner,registered,attended
+event_id,host_id,title,date_time,venue,max_participants,description,banner,participants_reg,participants_atnd
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,

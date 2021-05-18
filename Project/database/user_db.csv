@@ -1,1 +1,3 @@
 login_id,fName,lName,email,phone,password,profile_pic,events_reg,events_atnd,events_host
+0,fname,lname,123@123.com,9876543210,12345678,None,[],[],[]
+1,dummy,One,dummy@dummy.dum,7899877895,000000000,None,[],[],[]
