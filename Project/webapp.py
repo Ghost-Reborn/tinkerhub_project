@@ -130,7 +130,19 @@ def event_created():
     create_event_time1 = request.form['create-event-time1']
     create_event_time2 = request.form['create-event-time2']
     create_event_max = request.form['create-event-max_participants']
-    return '''<script>window.location='/home'</script>'''
+    date_time = create_event_date[:4]+create_event_date[5:7]+create_event_date[8:]+create_event_time1[:2]+create_event_time1[-2:]+create_event_time2[:2]+create_event_time2[-2:]
+    time_start = date_time[-8:-4]
+    time_end = date_time[-4:]
+    date = date_time[:8]
+    time_crnt = datetime.now().strftime('%H%M')
+    date_crnt = datetime.now().strftime('%Y%m%d')
+    if date_crnt>date:
+        return '''<script>alert('Event Date should be after or on Current Date');window.location='/create_event'</script>'''
+    if time_crnt>time_start:
+        return '''<script>alert('Event Starting Time should be after Current Time');window.location='/create_event'</script>'''
+    if time_start>time_end:
+        return '''<script>alert('Event Starting Time should be before Ending Time');window.location='/create_event'</script>'''
+    return '''<script>alert('Event Registered');window.location='/home'</script>'''
 
 #handling error 404
 @app.errorhandler(404)
