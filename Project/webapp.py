@@ -37,12 +37,18 @@ def home():
 #my events page route
 @app.route('/my_events')
 def my_events():
-    return render_template('my_events.html')
+    if 'lid' in session:
+        return render_template('my_events.html')
+    else:
+        return render_template('method_not_allowed.html')
 
 #profile page route
 @app.route('/profile')
 def profile():
-  return render_template('profile.html')
+    if 'lid' in session:
+      return render_template('profile.html')
+    else:
+        return render_template('method_not_allowed.html')
 
 #login function route
 @app.route('/login', methods = ['post'])
@@ -93,6 +99,11 @@ def signing_up():
         return '''<script>alert('Signing Up');window.location='/'</script>'''
     else:
         return '''<script>alert('Error');window.location='/sign_up'</script>'''
+
+#handling error 404
+@app.errorhandler(404)
+def error_404(e):
+    return render_template('page_notfound.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
