@@ -1,1 +1,4 @@
 event_id,host_id,title,date_time,venue,max_participants,description,banner,participants_reg,participants_atnd
+0,1,event_title,2021052613301430,Zoom,100,description again,20210519221625,[],[]
+1,0,event_title__,2021052215001630,Google Meet,50,event description,120210519221914,[],[]
+2,0,__event_title__,2022123101000200,somewhere,,description____,banner,[],[]

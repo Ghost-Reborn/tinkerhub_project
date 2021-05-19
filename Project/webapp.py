@@ -67,7 +67,7 @@ def login():
     login_pswd = request.form['login-pswd']
     if login_email not in np.array(user_db.email):
         return '''<script>alert('User not found');window.location='/'</script>'''
-    if str(user_db[user_db.email == login_email].password[0]) != login_pswd:
+    if str((user_db[user_db.email == login_email].password).tolist()[0]) != login_pswd:
         return '''<script>alert('Incorrect Password');window.location='/'</script>'''
     else:
         session['lid'] = user_db[user_db.email == login_email].login_id.tolist()[0]
@@ -113,6 +113,7 @@ def signing_up():
 #
 @app.route('/event_created', methods = ['post'])
 def event_created():
+    global event_db
     if event_db.event_id.max()!=True and event_db.event_id.max()!=0:
         next_eid = 0
     else:
@@ -129,6 +130,7 @@ def event_created():
     create_event_date = request.form['create-event-date']
     create_event_time1 = request.form['create-event-time1']
     create_event_time2 = request.form['create-event-time2']
+    create_event_venue = request.form['create-event-venue']
     create_event_max = request.form['create-event-max_participants']
     date_time = create_event_date[:4]+create_event_date[5:7]+create_event_date[8:]+create_event_time1[:2]+create_event_time1[-2:]+create_event_time2[:2]+create_event_time2[-2:]
     time_start = date_time[-8:-4]
@@ -138,10 +140,16 @@ def event_created():
     date_crnt = datetime.now().strftime('%Y%m%d')
     if date_crnt>date:
         return '''<script>alert('Event Date should be after or on Current Date');window.location='/create_event'</script>'''
-    if time_crnt>time_start:
+    if date_crnt + time_crnt > date + time_start:
         return '''<script>alert('Event Starting Time should be after Current Time');window.location='/create_event'</script>'''
-    if time_start>time_end:
+    if  date + time_start > date + time_end:
         return '''<script>alert('Event Starting Time should be before Ending Time');window.location='/create_event'</script>'''
+    data = [{'event_id': next_eid, 'host_id': session['lid'], 'title' : create_event_title, 'date_time' : date_time,
+            'venue': create_event_venue, 'max_participants' : create_event_max, 'description' : create_event_description,
+            'banner' : create_event_banner_name, 'participants_reg' : [], 'participants_atnd' : []}]
+    event_db = event_db.append(data, ignore_index=True, sort=False)
+    event_db.to_csv('database/event_db.csv', index=False)
+    event_db = pd.read_csv('database/event_db.csv')
     return '''<script>alert('Event Registered');window.location='/home'</script>'''
 
 #handling error 404
