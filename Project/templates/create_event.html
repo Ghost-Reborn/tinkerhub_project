@@ -1,0 +1,12 @@
+{% extends 'index.html' %}
+{% block body %}
+    <form method="post", action="/event_created" enctype="multipart/form-data">
+        <input type="text" required placeholder="Title" name="create-event-title">
+        <textarea placeholder="Enter description..." required name="create-event-description"></textarea>
+        Banner<input type="file" name="create-event-banner">
+        Date<input type="date" required name="create-event-date">
+        Time<input type="time" required name="create-event-time1">to<input type="time" required name="create-event-time2">
+        <input type="number" placeholder="Maximum Participants" name="create-event-max_participants">
+        <input type="submit" value="Register Event">
+    </form>
+{% endblock %}

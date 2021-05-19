@@ -4,6 +4,8 @@ from flask import *
 import os
 import numpy as np
 import pandas as pd
+from werkzeug.utils import secure_filename
+from datetime import *
 
 #creating flask object
 app = Flask(__name__)
@@ -47,6 +49,14 @@ def my_events():
 def profile():
     if 'lid' in session:
       return render_template('profile.html')
+    else:
+        return render_template('method_not_allowed.html')
+
+#create 
+@app.route('/create_event')
+def create_event():
+    if 'lid' in session:
+      return render_template('create_event.html')
     else:
         return render_template('method_not_allowed.html')
 
@@ -99,6 +109,28 @@ def signing_up():
         return '''<script>alert('Signing Up');window.location='/'</script>'''
     else:
         return '''<script>alert('Error');window.location='/sign_up'</script>'''
+
+#
+@app.route('/event_created', methods = ['post'])
+def event_created():
+    if event_db.event_id.max()!=True and event_db.event_id.max()!=0:
+        next_eid = 0
+    else:
+        next_eid = event_db.event_id.max() + 1
+    create_event_title = request.form['create-event-title']
+    create_event_description = request.form['create-event-description']
+    create_event_banner = request.files['create-event-banner']
+    if create_event_banner.filename != '':
+        time = datetime.now().strftime('%Y%m%d%H%M%S')
+        create_event_banner_name = str(next_eid) + time
+        create_event_banner.save(os.path.join('static/images/banners', create_event_banner_name+'.png'))
+    else:
+        create_event_banner_name = 'banner'
+    create_event_date = request.form['create-event-date']
+    create_event_time1 = request.form['create-event-time1']
+    create_event_time2 = request.form['create-event-time2']
+    create_event_max = request.form['create-event-max_participants']
+    return '''<script>window.location='/home'</script>'''
 
 #handling error 404
 @app.errorhandler(404)

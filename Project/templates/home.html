@@ -1,4 +1,10 @@
 {% extends 'index.html' %}
 {% block body %}
-home
+    <form method="post" action="/search_event">
+        <input type="search">
+        <input type="submit" value="Search">
+    </form>
+    
+    <a href="/create_event">Create Event</a>
+
 {% endblock %}
