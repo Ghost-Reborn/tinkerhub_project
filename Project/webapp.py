@@ -29,7 +29,20 @@ def signup():
 #home page route
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    if 'lid' in session:
+        return render_template('home.html')
+    else:
+        return render_template('method_not_allowed.html')
+
+#my events page route
+@app.route('/my_events')
+def my_events():
+    return render_template('my_events.html')
+
+#profile page route
+@app.route('/profile')
+def profile():
+  return render_template('profile.html')
 
 #login function route
 @app.route('/login', methods = ['post'])
@@ -41,7 +54,14 @@ def login():
     if str(user_db[user_db.email == login_email].password[0]) != login_pswd:
         return '''<script>alert('Incorrect Password');window.location='/'</script>'''
     else:
+        session['lid'] = user_db[user_db.email == login_email].login_id.tolist()[0]
         return '''<script>window.location='/home'</script>'''
+
+#logout function route
+@app.route('/logout')
+def logout():
+    session.clear()
+    return '''<script>window.location='/'</script>'''
 
 #sign up funtion route
 @app.route('/signing_up', methods = ['post'])

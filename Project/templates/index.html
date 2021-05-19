@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/main_style.css') }}" rel="stylesheet">
+    <title>Event Manager</title>
+</head>
+<body>
+    <nav>
+        <span></span>
+        <a href="/home">Home</a>
+        <a href="/my_events">My Events</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout">Logout</a>
+    </nav>
+    <div> {% block body %} {% endblock %} </div>
+</body>
+</html>
+<script src="{{ url_for('static', filename='js/main_script.js') }}"></script>
