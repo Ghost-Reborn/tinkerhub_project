@@ -1,25 +1,18 @@
 {% extends 'index.html' %}
 {% block body %}
-    <form method="post" action="/search_event">
-        <input type="search">
-        <input type="submit" value="Search">
-    </form>
-
+    
     <!-- ['event_id', 'host_id', 'title', 'date_time', 'venue','max_participants', 'description', 'banner', 'participants_reg',
        'participants_atnd', 'fName', 'lName', 'participants_reg_num','participants_reg_name', 'participants_atnd_name', 'dd', 'mm', 'yyyy',
        'hr_start', 'min_start', 'm_start', 'hr_end', 'min_end', 'm_end','event_fill_status'] -->
 
     {% for i in vals %}
-        <a href="/view_event?se_id={{i[0]}}">
-            <span>{{ i[24] }}</span>
+        <div href="/view_event?se_id={{i[0]}}">
             <img src="../static/images/banners/{{ i[7] }}.png">
             <h1>{{ i[2] }}</h1>
             <h3>{{ i[15]+'/'+i[16]+'/'+i[17] }}</h3>
             <h3>{{ i[18]+':'+i[19]+' '+i[20]+' to '+i[21]+':'+i[22]+' '+i[23] }}</h3>
             <h3>{{ i[10] + ' ' + i[11] }}</h3>
-        </a>
+        </div>
     {% endfor %}
-
-    <a href="/create_event">Create Event</a>
 
 {% endblock %}

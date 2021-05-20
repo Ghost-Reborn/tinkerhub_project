@@ -3,6 +3,7 @@ from collections import UserDict
 from flask import *
 import os
 import numpy as np
+from numpy.core.defchararray import join
 import pandas as pd
 from werkzeug.utils import secure_filename
 from datetime import *
@@ -16,6 +17,84 @@ global user_db, event_db
 user_db = pd.read_csv('database/user_db.csv')
 event_db = pd.read_csv('database/event_db.csv')
 
+#merge db
+global joined_df
+joined_df = event_db.merge(user_db, left_on='host_id', right_on='login_id').drop(columns=['login_id', 'email', 'phone', 'events_host', 'password', 'profile_pic', 'events_reg', 'events_atnd'], axis=1)
+name_db = user_db[['login_id', 'fName', 'lName']]
+name_db['full_name'] = name_db.fName + ' ' + name_db.lName
+name_db = name_db.drop(columns=['fName', 'lName'], axis=1)
+def get_fullName(lid):
+    return name_db.full_name[name_db.login_id == lid].tolist()[0]
+reg_count_list = []
+reg_names_list = []
+atnd_names_list = []
+for i in joined_df.participants_reg:
+    if i != 'None':
+        reg_id = i.split()
+        reg_count_list.append(len(reg_id))
+        reg_name_list = []
+        for j in reg_id:
+            reg_name_list.append(get_fullName(int(j)))
+        reg_names_list.append(reg_name_list)
+    else:
+        reg_names_list.append('')
+        reg_count_list.append(0)
+for i in joined_df.participants_atnd:
+    if i != 'None':
+        atnd_id = i.split()
+        atnd_name_list = []
+        for j in atnd_id:
+            atnd_name_list.append(get_fullName(int(j)))
+        atnd_names_list.append(atnd_name_list)
+    else:
+        atnd_names_list.append('')
+joined_df['participants_reg_num'] = reg_count_list
+joined_df['participants_reg_name'] = reg_names_list
+joined_df['participants_atnd_name'] = atnd_names_list
+dd = []
+mm = []
+yyyy = []
+hr_start = []
+min_start = []
+m_start = []
+hr_end = []
+min_end = []
+m_end = []
+for i in joined_df.date_time:
+    yyyy.append(i[:4])
+    mm.append(i[5:7])
+    dd.append(i[8:10])
+    if int(i[-11:-9])>12:
+        hr_start.append(str(int(i[-11:-9])-12))
+        m_start.append('PM')
+    else:
+        hr_start.append(i[-11:-9])
+        m_start.append('AM')
+    min_start.append(i[-8:-6])
+    if int(i[-5:-3])>12:
+        hr_end.append(str(int(i[-5:-3])-12))
+        m_end.append('PM')
+    else:
+        hr_end.append(i[-5:-3])
+        m_end.append('AM')
+    min_end.append(i[-2:])
+joined_df['dd'] = dd
+joined_df['mm'] = mm
+joined_df['yyyy'] = yyyy
+joined_df['hr_start'] = hr_start
+joined_df['min_start'] = min_start
+joined_df['m_start'] = m_start
+joined_df['hr_end'] = hr_end
+joined_df['min_end'] = min_end
+joined_df['m_end'] = m_end
+fill_list = []
+for i in joined_df.event_id:
+    if joined_df.max_participants[i]=='None' or int(joined_df.max_participants[i]) > joined_df.participants_reg_num[i]:
+        fill_list.append('Register Now')
+    else:
+        fill_list.append('Filled')
+joined_df['event_fill_status'] = fill_list
+print(joined_df.columns)
 
 ### defining routes
 #login page route
@@ -33,14 +112,20 @@ def signup():
 def home():
     if 'lid' in session:
         global joined_df
-        joined_df = event_db.merge(user_db, left_on='host_id', right_on='login_id')[['event_id', 'banner', 'title', 'description', 'venue', 'date_time', 'fName', 'lName', 'max_participants', 'participants_reg']]
-        # print(joined_df.participants_reg)
-        # print(joined_df)
-        return render_template('home.html')
+        return render_template('home.html', vals = joined_df.sort_values(by='event_id', ascending=False).to_numpy())
     else:
         return render_template('method_not_allowed.html')
 
-#create 
+#view event page route
+@app.route('/view_event')
+def view_event():
+    global joined_df
+    selected_eid = request.args.get('se_id')
+    selected_event = joined_df[joined_df.event_id == np.int64(selected_eid)]
+    # print(selected_event)
+    return render_template('view_event.html', vals = selected_event.to_numpy())
+
+#create event page route
 @app.route('/create_event')
 def create_event():
     if 'lid' in session:
