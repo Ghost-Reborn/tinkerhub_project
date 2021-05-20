@@ -32,7 +32,18 @@ def signup():
 @app.route('/home')
 def home():
     if 'lid' in session:
+        joined_df = event_db.merge(user_db, left_on='host_id', right_on='login_id')[['event_id', 'banner', 'title', 'description', 'venue', 'date_time', 'fName', 'lName', 'max_participants', 'participants_reg']]
+        joined_df['participants_num'] = joined_df['participants_reg'].str.split().str.len()
+        # print(joined_df)
         return render_template('home.html')
+    else:
+        return render_template('method_not_allowed.html')
+
+#create 
+@app.route('/create_event')
+def create_event():
+    if 'lid' in session:
+      return render_template('create_event.html')
     else:
         return render_template('method_not_allowed.html')
 
@@ -49,14 +60,6 @@ def my_events():
 def profile():
     if 'lid' in session:
       return render_template('profile.html')
-    else:
-        return render_template('method_not_allowed.html')
-
-#create 
-@app.route('/create_event')
-def create_event():
-    if 'lid' in session:
-      return render_template('create_event.html')
     else:
         return render_template('method_not_allowed.html')
 
@@ -96,13 +99,13 @@ def signing_up():
     if signup_pswd1!=signup_pswd2:
         return '''<script>alert('Passwords not Matching');window.location='/sign_up'</script>'''
     elif signup_pswd1==signup_pswd2:
-        if user_db.login_id.max()!=True and user_db.login_id.max()!=0:
-            next_uid = 0
-        else:
+        if user_db.login_id.max()>=0:
             next_uid = user_db.login_id.max() + 1
+        else:
+            next_uid = 0
         data = [{'login_id': next_uid, 'fName': signup_fname, 'lName': signup_lname, 'email': signup_email,
                 'phone': signup_phone, 'password': signup_pswd1, 'profile_pic': 'None',
-                'events_reg': [], 'events_atnd': [], 'events_host': []}]
+                'events_reg': 'None', 'events_atnd': 'None', 'events_host': 'None'}]
         user_db = user_db.append(data, ignore_index=True, sort=False)
         user_db.to_csv('database/user_db.csv', index=False)
         user_db = pd.read_csv('database/user_db.csv')
@@ -114,10 +117,10 @@ def signing_up():
 @app.route('/event_created', methods = ['post'])
 def event_created():
     global event_db
-    if event_db.event_id.max()!=True and event_db.event_id.max()!=0:
-        next_eid = 0
-    else:
+    if event_db.event_id.max()>=0:
         next_eid = event_db.event_id.max() + 1
+    else:
+        next_eid = 0
     create_event_title = request.form['create-event-title']
     create_event_description = request.form['create-event-description']
     create_event_banner = request.files['create-event-banner']
@@ -144,12 +147,20 @@ def event_created():
         return '''<script>alert('Event Starting Time should be after Current Time');window.location='/create_event'</script>'''
     if  date + time_start > date + time_end:
         return '''<script>alert('Event Starting Time should be before Ending Time');window.location='/create_event'</script>'''
+    date_time = create_event_date[:4]+'/'+create_event_date[5:7]+'/'+create_event_date[8:]+'-'+create_event_time1[:2]+':'+create_event_time1[-2:]+'-'+create_event_time2[:2]+':'+create_event_time2[-2:]
     data = [{'event_id': next_eid, 'host_id': session['lid'], 'title' : create_event_title, 'date_time' : date_time,
             'venue': create_event_venue, 'max_participants' : create_event_max, 'description' : create_event_description,
-            'banner' : create_event_banner_name, 'participants_reg' : [], 'participants_atnd' : []}]
+            'banner' : create_event_banner_name, 'participants_reg' : 'None', 'participants_atnd' : 'None'}]
     event_db = event_db.append(data, ignore_index=True, sort=False)
+
+    if user_db[user_db.login_id == session['lid']].events_host.tolist()[0] == 'None':
+        user_db.at[user_db.login_id == session['lid'], 'events_host'] = next_eid
+    else:
+        user_db.at[user_db.login_id == session['lid'], 'events_host'] = str(user_db.events_host[user_db['login_id'] == session['lid']][0])+' '+str(next_eid)
     event_db.to_csv('database/event_db.csv', index=False)
     event_db = pd.read_csv('database/event_db.csv')
+    user_db.to_csv('database/user_db.csv', index=False)
+    user_db = pd.read_csv('database/user_db.csv')
     return '''<script>alert('Event Registered');window.location='/home'</script>'''
 
 #handling error 404
