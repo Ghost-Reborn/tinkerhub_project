@@ -121,7 +121,8 @@ def view_event():
     global joined_df
     selected_eid = request.args.get('se_id')
     selected_event = joined_df[joined_df.event_id == np.int64(selected_eid)]
-    # print(selected_event)
+    if (selected_event.event_fill_status == 'Filled').tolist()[0]:
+        return '''<script>alert('This Event is Full');window.location='/home'</script>'''
     return render_template('view_event.html', vals = selected_event.to_numpy())
 
 #create event page route
