@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=<>>, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            padding: 0;
+            margin: 0 auto;
+            border-radius: 12px;
+        }
+        #banner{
+            margin-top: 5%;
+            width: 80vw;
+            height: 30vh;
+            background-image: url('banner.png');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            box-shadow: 0 0 15px 5px rgba(0, 0, 55, .25);
+        }
+        #overlay{
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id=banner>
+        <div id=overlay></div>
+    </div>
+</body>
+</html>
+<script>
+    r = Math.floor(Math.random() * 256).toString()
+    g = Math.floor(Math.random() * 256).toString()
+    b = Math.floor(Math.random() * 256).toString()
+    clr = 'rgba(' + r +',' + g + ',' + b+', .5)'
+    document.getElementById('overlay').style.background = clr;
+</script>
