@@ -6,13 +6,15 @@
        'hr_start', 'min_start', 'm_start', 'hr_end', 'min_end', 'm_end','event_fill_status'] -->
 
     {% for i in vals %}
-        <div href="/view_event?se_id={{i[0]}}">
-            <img src="../static/images/banners/{{ i[7] }}.png">
-            <h1>{{ i[2] }}</h1>
-            <h3>{{ i[15]+'/'+i[16]+'/'+i[17] }}</h3>
-            <h3>{{ i[18]+':'+i[19]+' '+i[20]+' to '+i[21]+':'+i[22]+' '+i[23] }}</h3>
-            <h3>{{ i[10] + ' ' + i[11] }}</h3>
-        </div>
+        <img src="../static/images/banners/{{ i[7] }}.png">
+        <h1>{{ i[2] }}</h1>
+        <p>{{ i[6] }}</p>
+        <h3>Hosted by: {{ i[10] + ' ' + i[11] }}</h3>
+        <h3>Venue: {{ i[4] }}</h3>
+        <h3>Date: {{ i[15]+'/'+i[16]+'/'+i[17] }}</h3>
+        <h3>Time: {{ i[18]+':'+i[19]+' '+i[20]+' to '+i[21]+':'+i[22]+' '+i[23] }}</h3>
+        <h4>Attendees: {{ i[13][0] }}, {{ i[13][1] }}</h4>
+        <a href="/register_event?e_id={{ i[0] }}">Register</a>
     {% endfor %}
 
 {% endblock %}

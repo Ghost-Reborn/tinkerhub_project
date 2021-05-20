@@ -94,8 +94,6 @@ for i in joined_df.event_id:
     else:
         fill_list.append('Filled')
 joined_df['event_fill_status'] = fill_list
-print(joined_df.columns)
-
 ### defining routes
 #login page route
 @app.route('/')
@@ -112,7 +110,8 @@ def signup():
 def home():
     if 'lid' in session:
         global joined_df
-        return render_template('home.html', vals = joined_df.sort_values(by='event_id', ascending=False).to_numpy())
+        home_df = joined_df[joined_df.host_id != session['lid']]
+        return render_template('home.html', vals = home_df.sort_values(by='event_id', ascending=False).to_numpy())
     else:
         return render_template('method_not_allowed.html')
 
