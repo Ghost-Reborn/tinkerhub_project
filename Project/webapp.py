@@ -32,8 +32,9 @@ def signup():
 @app.route('/home')
 def home():
     if 'lid' in session:
+        global joined_df
         joined_df = event_db.merge(user_db, left_on='host_id', right_on='login_id')[['event_id', 'banner', 'title', 'description', 'venue', 'date_time', 'fName', 'lName', 'max_participants', 'participants_reg']]
-        joined_df['participants_num'] = joined_df['participants_reg'].str.split().str.len()
+        # print(joined_df.participants_reg)
         # print(joined_df)
         return render_template('home.html')
     else:
@@ -135,6 +136,10 @@ def event_created():
     create_event_time2 = request.form['create-event-time2']
     create_event_venue = request.form['create-event-venue']
     create_event_max = request.form['create-event-max_participants']
+    if create_event_max == '':
+        create_event_max = 'None'
+    elif int(create_event_max)<5:
+            return '''<script>alert('Event should have atleast 5 members');window.location='/create_event'</script>'''
     date_time = create_event_date[:4]+create_event_date[5:7]+create_event_date[8:]+create_event_time1[:2]+create_event_time1[-2:]+create_event_time2[:2]+create_event_time2[-2:]
     time_start = date_time[-8:-4]
     time_end = date_time[-4:]
@@ -152,11 +157,11 @@ def event_created():
             'venue': create_event_venue, 'max_participants' : create_event_max, 'description' : create_event_description,
             'banner' : create_event_banner_name, 'participants_reg' : 'None', 'participants_atnd' : 'None'}]
     event_db = event_db.append(data, ignore_index=True, sort=False)
-
+    global user_db
     if user_db[user_db.login_id == session['lid']].events_host.tolist()[0] == 'None':
         user_db.at[user_db.login_id == session['lid'], 'events_host'] = next_eid
     else:
-        user_db.at[user_db.login_id == session['lid'], 'events_host'] = str(user_db.events_host[user_db['login_id'] == session['lid']][0])+' '+str(next_eid)
+        user_db.at[user_db.login_id == session['lid'], 'events_host'] = str(user_db.events_host[user_db['login_id'] == session['lid']].tolist()[0])+' '+str(next_eid)
     event_db.to_csv('database/event_db.csv', index=False)
     event_db = pd.read_csv('database/event_db.csv')
     user_db.to_csv('database/user_db.csv', index=False)
