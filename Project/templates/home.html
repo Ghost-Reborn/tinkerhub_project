@@ -5,17 +5,18 @@
         <input type="submit" value="Search">
     </form>
 
-    <!-- ['event_id', 'host_id', 'title', 'date_time', 'venue','max_participants', 'description', 'banner', 'participants_reg',
-       'participants_atnd', 'fName', 'lName', 'participants_reg_num','participants_reg_name', 'participants_atnd_name', 'dd', 'mm', 'yyyy',
-       'hr_start', 'min_start', 'm_start', 'hr_end', 'min_end', 'm_end','event_fill_status'] -->
+    <!-- ['event_id', 'host_id', 'title', 'date_time', 'venue',
+    'max_participants', 'description', 'banner', 'participants_reg','participants_atnd',
+    'fName', 'lName', 'participants_reg_num', 'participants_reg_name', 'participants_atnd_name',
+    'hr_start', 'm_start', 'hr_end', 'm_end', 'event_fill_status'] -->
 
     {% for i in vals %}
         <a href="/view_event?se_id={{i[0]}}">
-            <span>{{ i[24] }}</span>
+            <span>{{ i[19] }}</span>
             <img src="../static/images/banners/{{ i[7] }}.png">
             <h1>{{ i[2] }}</h1>
-            <h3>{{ i[15]+'/'+i[16]+'/'+i[17] }}</h3>
-            <h3>{{ i[18]+':'+i[19]+' '+i[20]+' to '+i[21]+':'+i[22]+' '+i[23] }}</h3>
+            <h3>Date: {{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</h3>
+            <h3>Time: {{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</h3>
             <h3>{{ i[10] + ' ' + i[11] }}</h3>
         </a>
     {% endfor %}

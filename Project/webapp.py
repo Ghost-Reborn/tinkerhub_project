@@ -51,41 +51,26 @@ for i in joined_df.participants_atnd:
 joined_df['participants_reg_num'] = reg_count_list
 joined_df['participants_reg_name'] = reg_names_list
 joined_df['participants_atnd_name'] = atnd_names_list
-dd = []
-mm = []
-yyyy = []
 hr_start = []
-min_start = []
 m_start = []
 hr_end = []
-min_end = []
 m_end = []
 for i in joined_df.date_time:
-    yyyy.append(i[:4])
-    mm.append(i[5:7])
-    dd.append(i[8:10])
     if int(i[-11:-9])>12:
         hr_start.append(str(int(i[-11:-9])-12))
         m_start.append('PM')
     else:
         hr_start.append(i[-11:-9])
         m_start.append('AM')
-    min_start.append(i[-8:-6])
     if int(i[-5:-3])>12:
         hr_end.append(str(int(i[-5:-3])-12))
         m_end.append('PM')
     else:
         hr_end.append(i[-5:-3])
         m_end.append('AM')
-    min_end.append(i[-2:])
-joined_df['dd'] = dd
-joined_df['mm'] = mm
-joined_df['yyyy'] = yyyy
 joined_df['hr_start'] = hr_start
-joined_df['min_start'] = min_start
 joined_df['m_start'] = m_start
 joined_df['hr_end'] = hr_end
-joined_df['min_end'] = min_end
 joined_df['m_end'] = m_end
 fill_list = []
 for i in joined_df.event_id:
@@ -94,6 +79,7 @@ for i in joined_df.event_id:
     else:
         fill_list.append('Filled')
 joined_df['event_fill_status'] = fill_list
+
 ### defining routes
 #login page route
 @app.route('/')
@@ -111,6 +97,12 @@ def home():
     if 'lid' in session:
         global joined_df
         home_df = joined_df[joined_df.host_id != session['lid']]
+        current_dt = datetime.now().strftime('%Y%m%d%H%M')
+        upcomming_list = []
+        for i in home_df.event_id:
+            dt = home_df.date_time[home_df.event_id == i].tolist()[0]
+            upcomming_list.append(dt[:4]+dt[5:7]+dt[8:10]+dt[11:13]+dt[14:16]>current_dt)
+        home_df = home_df[upcomming_list]
         return render_template('home.html', vals = home_df.sort_values(by='event_id', ascending=False).to_numpy())
     else:
         return render_template('method_not_allowed.html')

@@ -1,9 +1,11 @@
 {% extends 'index.html' %}
 {% block body %}
     
-    <!-- ['event_id', 'host_id', 'title', 'date_time', 'venue','max_participants', 'description', 'banner', 'participants_reg',
-       'participants_atnd', 'fName', 'lName', 'participants_reg_num','participants_reg_name', 'participants_atnd_name', 'dd', 'mm', 'yyyy',
-       'hr_start', 'min_start', 'm_start', 'hr_end', 'min_end', 'm_end','event_fill_status'] -->
+    <!-- ['event_id', 'host_id', 'title', 'date_time', 'venue',
+       'max_participants', 'description', 'banner', 'participants_reg',
+       'participants_atnd', 'fName', 'lName', 'participants_reg_num',
+       'participants_reg_name', 'participants_atnd_name', 'hr_start',
+       'm_start', 'hr_end', 'm_end', 'event_fill_status'] -->
 
     {% for i in vals %}
         <img src="../static/images/banners/{{ i[7] }}.png">
@@ -11,8 +13,8 @@
         <p>{{ i[6] }}</p>
         <h3>Hosted by: {{ i[10] + ' ' + i[11] }}</h3>
         <h3>Venue: {{ i[4] }}</h3>
-        <h3>Date: {{ i[15]+'/'+i[16]+'/'+i[17] }}</h3>
-        <h3>Time: {{ i[18]+':'+i[19]+' '+i[20]+' to '+i[21]+':'+i[22]+' '+i[23] }}</h3>
+        <h3>Date: {{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</h3>
+        <h3>Time: {{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</h3>
         <h4>Attendees: {{ i[13][0] }}, {{ i[13][1] }}</h4>
         <a href="/register_event?e_id={{ i[0] }}">Register</a>
     {% endfor %}
