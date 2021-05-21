@@ -13,10 +13,11 @@ app = Flask(__name__)
 app.secret_key = 'xyz'
 
 ### defining dataframe/db
-global user_db, event_db, joined_df
+global user_db, event_db
 user_db = pd.read_csv('database/user_db.csv')
 event_db = pd.read_csv('database/event_db.csv')
 
+#joining databases
 def get_joined_df():
     joined_df = event_db.merge(user_db, left_on='host_id', right_on='login_id').drop(columns=['login_id', 'email', 'phone', 'events_host', 'password', 'profile_pic', 'events_reg', 'events_atnd'], axis=1)
     name_db = user_db[['login_id', 'fName', 'lName']]
@@ -80,6 +81,27 @@ def get_joined_df():
     joined_df['event_fill_status'] = fill_list
     return joined_df
 
+#getting home datadrame
+def get_home_df():
+    joined_df = get_joined_df()
+    home_df = joined_df[joined_df.host_id != session['lid']]
+    current_dt = datetime.now().strftime('%Y%m%d%H%M')
+    upcomming_list = []
+    for i in home_df.event_id:
+        dt = home_df.date_time[home_df.event_id == i].tolist()[0]
+        upcomming_list.append(dt[:4]+dt[5:7]+dt[8:10]+dt[11:13]+dt[14:16]>current_dt)
+    home_df = home_df[upcomming_list]
+    in_my_list = []
+    for i in home_df.event_id:
+        participants_reg_list = home_df.participants_reg[home_df.index == i].tolist()[0]
+        if participants_reg_list != 'None':
+            in_my_list.append(not str(session['lid']) in participants_reg_list.split())
+        else:
+            in_my_list.append(True)
+    home_df = home_df[in_my_list]
+    return home_df
+
+
 ### defining routes
 #login page route
 @app.route('/')
@@ -95,22 +117,7 @@ def signup():
 @app.route('/home')
 def home():
     if 'lid' in session:
-        joined_df = get_joined_df()
-        home_df = joined_df[joined_df.host_id != session['lid']]
-        current_dt = datetime.now().strftime('%Y%m%d%H%M')
-        upcomming_list = []
-        for i in home_df.event_id:
-            dt = home_df.date_time[home_df.event_id == i].tolist()[0]
-            upcomming_list.append(dt[:4]+dt[5:7]+dt[8:10]+dt[11:13]+dt[14:16]>current_dt)
-        home_df = home_df[upcomming_list]
-        in_my_list = []
-        for i in home_df.event_id:
-            participants_reg_list = home_df.participants_reg[home_df.index == i].tolist()[0]
-            if participants_reg_list != 'None':
-                in_my_list.append(not str(session['lid']) in participants_reg_list.split())
-            else:
-                in_my_list.append(True)
-        home_df = home_df[in_my_list]
+        home_df = get_home_df()
         return render_template('home.html', vals = home_df.sort_values(by='event_id', ascending=False).to_numpy())
     else:
         return render_template('method_not_allowed.html')
@@ -274,9 +281,13 @@ def register_event():
     return '''<script>alert('Registered to Event');window.location='/home'</script>'''
 
 #search event function route
-# @app.route('/'search_event)
-# def search_event():
-#   return 
+@app.route('/search_event', methods = ['post'])
+def search_event():
+    s_event_name = request.form['seach_title']
+    joined_df = get_joined_df()
+    joined_df = joined_df[joined_df.title == s_event_name]
+    return render_template('search_results.html', vals= joined_df.sort_values(by='event_id', ascending=False).to_numpy())
+# /view_event?se_id=
 
 #handling error 404
 @app.errorhandler(404)
