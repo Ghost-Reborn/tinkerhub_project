@@ -13,72 +13,72 @@ app = Flask(__name__)
 app.secret_key = 'xyz'
 
 ### defining dataframe/db
-global user_db, event_db
+global user_db, event_db, joined_df
 user_db = pd.read_csv('database/user_db.csv')
 event_db = pd.read_csv('database/event_db.csv')
 
-#merge db
-global joined_df
-joined_df = event_db.merge(user_db, left_on='host_id', right_on='login_id').drop(columns=['login_id', 'email', 'phone', 'events_host', 'password', 'profile_pic', 'events_reg', 'events_atnd'], axis=1)
-name_db = user_db[['login_id', 'fName', 'lName']]
-name_db['full_name'] = name_db.fName + ' ' + name_db.lName
-name_db = name_db.drop(columns=['fName', 'lName'], axis=1)
-def get_fullName(lid):
-    return name_db.full_name[name_db.login_id == lid].tolist()[0]
-reg_count_list = []
-reg_names_list = []
-atnd_names_list = []
-for i in joined_df.participants_reg:
-    if i != 'None':
-        reg_id = i.split()
-        reg_count_list.append(len(reg_id))
-        reg_name_list = []
-        for j in reg_id:
-            reg_name_list.append(get_fullName(int(j)))
-        reg_names_list.append(reg_name_list)
-    else:
-        reg_names_list.append('')
-        reg_count_list.append(0)
-for i in joined_df.participants_atnd:
-    if i != 'None':
-        atnd_id = i.split()
-        atnd_name_list = []
-        for j in atnd_id:
-            atnd_name_list.append(get_fullName(int(j)))
-        atnd_names_list.append(atnd_name_list)
-    else:
-        atnd_names_list.append('')
-joined_df['participants_reg_num'] = reg_count_list
-joined_df['participants_reg_name'] = reg_names_list
-joined_df['participants_atnd_name'] = atnd_names_list
-hr_start = []
-m_start = []
-hr_end = []
-m_end = []
-for i in joined_df.date_time:
-    if int(i[-11:-9])>12:
-        hr_start.append(str(int(i[-11:-9])-12))
-        m_start.append('PM')
-    else:
-        hr_start.append(i[-11:-9])
-        m_start.append('AM')
-    if int(i[-5:-3])>12:
-        hr_end.append(str(int(i[-5:-3])-12))
-        m_end.append('PM')
-    else:
-        hr_end.append(i[-5:-3])
-        m_end.append('AM')
-joined_df['hr_start'] = hr_start
-joined_df['m_start'] = m_start
-joined_df['hr_end'] = hr_end
-joined_df['m_end'] = m_end
-fill_list = []
-for i in joined_df.event_id:
-    if joined_df.max_participants[i]=='None' or int(joined_df.max_participants[i]) > joined_df.participants_reg_num[i]:
-        fill_list.append('Register Now')
-    else:
-        fill_list.append('Filled')
-joined_df['event_fill_status'] = fill_list
+def get_joined_df():
+    joined_df = event_db.merge(user_db, left_on='host_id', right_on='login_id').drop(columns=['login_id', 'email', 'phone', 'events_host', 'password', 'profile_pic', 'events_reg', 'events_atnd'], axis=1)
+    name_db = user_db[['login_id', 'fName', 'lName']]
+    name_db['full_name'] = name_db.fName + ' ' + name_db.lName
+    name_db = name_db.drop(columns=['fName', 'lName'], axis=1)
+    def get_fullName(lid):
+        return name_db.full_name[name_db.login_id == lid].tolist()[0]
+    reg_count_list = []
+    reg_names_list = []
+    atnd_names_list = []
+    for i in joined_df.participants_reg:
+        if i != 'None':
+            reg_id = i.split()
+            reg_count_list.append(len(reg_id))
+            reg_name_list = []
+            for j in reg_id:
+                reg_name_list.append(get_fullName(int(j)))
+            reg_names_list.append(reg_name_list)
+        else:
+            reg_names_list.append('')
+            reg_count_list.append(0)
+    for i in joined_df.participants_atnd:
+        if i != 'None':
+            atnd_id = i.split()
+            atnd_name_list = []
+            for j in atnd_id:
+                atnd_name_list.append(get_fullName(int(j)))
+            atnd_names_list.append(atnd_name_list)
+        else:
+            atnd_names_list.append('')
+    joined_df['participants_reg_num'] = reg_count_list
+    joined_df['participants_reg_name'] = reg_names_list
+    joined_df['participants_atnd_name'] = atnd_names_list
+    hr_start = []
+    m_start = []
+    hr_end = []
+    m_end = []
+    for i in joined_df.date_time:
+        if int(i[-11:-9])>12:
+            hr_start.append(str(int(i[-11:-9])-12))
+            m_start.append('PM')
+        else:
+            hr_start.append(i[-11:-9])
+            m_start.append('AM')
+        if int(i[-5:-3])>12:
+            hr_end.append(str(int(i[-5:-3])-12))
+            m_end.append('PM')
+        else:
+            hr_end.append(i[-5:-3])
+            m_end.append('AM')
+    joined_df['hr_start'] = hr_start
+    joined_df['m_start'] = m_start
+    joined_df['hr_end'] = hr_end
+    joined_df['m_end'] = m_end
+    fill_list = []
+    for i in joined_df.event_id:
+        if joined_df.max_participants[i]=='None' or int(joined_df.max_participants[i]) > joined_df.participants_reg_num[i]:
+            fill_list.append('Register Now')
+        else:
+            fill_list.append('Filled')
+    joined_df['event_fill_status'] = fill_list
+    return joined_df
 
 ### defining routes
 #login page route
@@ -95,7 +95,7 @@ def signup():
 @app.route('/home')
 def home():
     if 'lid' in session:
-        global joined_df
+        joined_df = get_joined_df()
         home_df = joined_df[joined_df.host_id != session['lid']]
         current_dt = datetime.now().strftime('%Y%m%d%H%M')
         upcomming_list = []
@@ -110,8 +110,8 @@ def home():
 #view event page route
 @app.route('/view_event')
 def view_event():
-    global joined_df
     selected_eid = request.args.get('se_id')
+    joined_df = get_joined_df()
     selected_event = joined_df[joined_df.event_id == np.int64(selected_eid)]
     if (selected_event.event_fill_status == 'Filled').tolist()[0]:
         return '''<script>alert('This Event is Full');window.location='/home'</script>'''
@@ -244,6 +244,14 @@ def event_created():
     user_db.to_csv('database/user_db.csv', index=False)
     user_db = pd.read_csv('database/user_db.csv')
     return '''<script>alert('Event Registered');window.location='/home'</script>'''
+
+# register event function
+@app.route('/register_event')
+def register_event():
+    register_eid = request.args.get('e_id')
+    print(user_db)
+    print(event_db)
+    return '''<script>alert('Registered to Event');window.location='/home'</script>'''
 
 #handling error 404
 @app.errorhandler(404)
