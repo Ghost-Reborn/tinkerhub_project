@@ -103,6 +103,14 @@ def home():
             dt = home_df.date_time[home_df.event_id == i].tolist()[0]
             upcomming_list.append(dt[:4]+dt[5:7]+dt[8:10]+dt[11:13]+dt[14:16]>current_dt)
         home_df = home_df[upcomming_list]
+        in_my_list = []
+        for i in home_df.event_id:
+            participants_reg_list = home_df.participants_reg[home_df.index == i].tolist()[0]
+            if participants_reg_list != 'None':
+                in_my_list.append(not str(session['lid']) in participants_reg_list.split())
+            else:
+                in_my_list.append(True)
+        home_df = home_df[in_my_list]
         return render_template('home.html', vals = home_df.sort_values(by='event_id', ascending=False).to_numpy())
     else:
         return render_template('method_not_allowed.html')
@@ -258,6 +266,7 @@ def register_event():
         event_db.at[event_db.event_id == np.int64(register_eid), 'participants_reg'] = str(session['lid'])
     else:
         event_db.at[event_db.event_id == np.int64(register_eid), 'participants_reg'] = str(event_db.participants_reg[event_db['event_id'] == np.int64(register_eid)].tolist()[0])+' '+str(session['lid'])
+    print(event_db.participants_reg)
     user_db.to_csv('database/user_db.csv', index=False)
     user_db = pd.read_csv('database/user_db.csv')
     event_db.to_csv('database/event_db.csv', index=False)
