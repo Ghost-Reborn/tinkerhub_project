@@ -248,9 +248,20 @@ def event_created():
 # register event function
 @app.route('/register_event')
 def register_event():
+    global user_db, event_db
     register_eid = request.args.get('e_id')
-    print(user_db)
-    print(event_db)
+    if user_db[user_db.login_id == session['lid']].events_reg.tolist()[0] == 'None':
+        user_db.at[user_db.login_id == session['lid'], 'events_reg'] = register_eid
+    else:
+        user_db.at[user_db.login_id == session['lid'], 'events_reg'] = str(user_db.events_reg[user_db['login_id'] == session['lid']].tolist()[0])+' '+str(register_eid)
+    if event_db[event_db.event_id == np.int64(register_eid)].participants_reg.tolist()[0] == 'None':
+        event_db.at[event_db.event_id == np.int64(register_eid), 'participants_reg'] = str(session['lid'])
+    else:
+        event_db.at[event_db.event_id == np.int64(register_eid), 'participants_reg'] = str(event_db.participants_reg[event_db['event_id'] == np.int64(register_eid)].tolist()[0])+' '+str(session['lid'])
+    user_db.to_csv('database/user_db.csv', index=False)
+    user_db = pd.read_csv('database/user_db.csv')
+    event_db.to_csv('database/event_db.csv', index=False)
+    event_db = pd.read_csv('database/event_db.csv')
     return '''<script>alert('Registered to Event');window.location='/home'</script>'''
 
 #handling error 404
