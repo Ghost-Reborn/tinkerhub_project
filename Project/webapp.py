@@ -118,6 +118,8 @@ def signup():
 def home():
     if 'lid' in session:
         home_df = get_home_df()
+        if len(home_df)==0:
+          return render_template('no_events_found.html')
         return render_template('home.html', vals = home_df.sort_values(by='event_id', ascending=False).to_numpy())
     else:
         return render_template('method_not_allowed.html')
@@ -284,9 +286,11 @@ def register_event():
 @app.route('/search_event', methods = ['post'])
 def search_event():
     s_event_name = request.form['seach_title']
-    joined_df = get_joined_df()
-    joined_df = joined_df[joined_df.title == s_event_name]
-    return render_template('search_results.html', vals= joined_df.sort_values(by='event_id', ascending=False).to_numpy())
+    home_df = get_home_df()
+    home_df = home_df[home_df.title == s_event_name]
+    if len(home_df)==0:
+        return render_template('no_events_found.html')
+    return render_template('search_results.html', vals= home_df.sort_values(by='event_id', ascending=False).to_numpy())
 # /view_event?se_id=
 
 #handling error 404
