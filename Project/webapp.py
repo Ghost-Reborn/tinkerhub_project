@@ -191,7 +191,7 @@ def signing_up():
     else:
         return '''<script>alert('Error');window.location='/sign_up'</script>'''
 
-#
+#event creation function route
 @app.route('/event_created', methods = ['post'])
 def event_created():
     global event_db
@@ -245,7 +245,7 @@ def event_created():
     user_db = pd.read_csv('database/user_db.csv')
     return '''<script>alert('Event Registered');window.location='/home'</script>'''
 
-# register event function
+#register event function
 @app.route('/register_event')
 def register_event():
     global user_db, event_db
@@ -263,6 +263,11 @@ def register_event():
     event_db.to_csv('database/event_db.csv', index=False)
     event_db = pd.read_csv('database/event_db.csv')
     return '''<script>alert('Registered to Event');window.location='/home'</script>'''
+
+#search event function route
+# @app.route('/'search_event)
+# def search_event():
+#   return 
 
 #handling error 404
 @app.errorhandler(404)
