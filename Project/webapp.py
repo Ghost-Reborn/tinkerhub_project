@@ -3,7 +3,7 @@ from collections import UserDict
 from flask import *
 import os
 import numpy as np
-from numpy.core.defchararray import join
+from numpy.core.defchararray import count, join
 import pandas as pd
 from werkzeug.utils import secure_filename
 from datetime import *
@@ -93,7 +93,7 @@ def get_home_df():
     home_df = home_df[upcomming_list]
     in_my_list = []
     for i in home_df.event_id:
-        participants_reg_list = home_df.participants_reg[home_df.index == i].tolist()[0]
+        participants_reg_list = home_df.participants_reg[home_df.event_id == i].tolist()[0]
         if participants_reg_list != 'None':
             in_my_list.append(not str(session['lid']) in participants_reg_list.split())
         else:
@@ -103,22 +103,43 @@ def get_home_df():
 
 #getting my events dataframe
 def get_my_events_df():
-    joined_df = get_joined_df()
+    joined_df = get_joined_df().drop('event_fill_status', axis=1)
     my_events_df = joined_df[joined_df.host_id != session['lid']]
     current_dt = datetime.now().strftime('%Y%m%d%H%M')
-    upcomming_list = []
+    live_status_list = []
     for i in my_events_df.event_id:
         dt = my_events_df.date_time[my_events_df.event_id == i].tolist()[0]
-        upcomming_list.append(dt[:4]+dt[5:7]+dt[8:10]+dt[11:13]+dt[14:16]>current_dt)
-    my_events_df = my_events_df[upcomming_list]
+        event_date = str(dt[:4]+dt[5:7]+dt[8:10])
+        if event_date > current_dt[:8]:
+            live_status_list.append('Coming Soon')
+        elif event_date < current_dt[:8]:
+            live_status_list.append(False)
+        else:
+            event_start_time = str(dt[11:-9]+dt[-8:-6])
+            event_end_time = str(dt[-5:-3]+dt[-2:])
+            if current_dt[-4:]>event_end_time:
+                live_status_list.append(False)
+            elif current_dt[-4:]<event_start_time:
+                current_time_ = int(current_dt[-4:-2])*60 + int(current_dt[-2:])
+                start_time_ = int(event_start_time[:2])*60 + int(event_start_time[2:])
+                count_down_ = start_time_ - current_time_
+                count_down_hr = str(count_down_//60)
+                count_down_min = str(count_down_%60)
+                if len(count_down_hr)<2:
+                    count_down_hr = '0'+str(count_down_hr)
+                live_status_list.append(count_down_hr +':'+ count_down_min)
+            elif event_start_time<current_dt[-4:]<event_end_time:
+                live_status_list.append('Live')
+    my_events_df['live_status'] = live_status_list
+    my_events_df = my_events_df[my_events_df.live_status!=False]
     in_my_list = []
     for i in my_events_df.event_id:
-        participants_reg_list = my_events_df.participants_reg[my_events_df.index == i].tolist()[0]
-        if participants_reg_list != []:
-            in_my_list.append(str(session['lid']) in participants_reg_list.split())
-        else:
+        participants_reg_list = my_events_df.participants_reg[my_events_df.event_id == i].tolist()[0]
+        if participants_reg_list == 'None':
             in_my_list.append(False)
-    print(my_events_df)
+        else:
+            in_my_list.append(str(session['lid']) in participants_reg_list.split())
+    my_events_df = my_events_df[in_my_list]
     return my_events_df
 
 ### defining routes
