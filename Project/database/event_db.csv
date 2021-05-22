@@ -3,7 +3,7 @@ event_id,host_id,title,date_time,venue,max_participants,description,banner,parti
 1,0,EVENT NEW,2021/06/01-01:00-03:00,Google Meet,30,NEW description,banner,2 1,None
 2,1,UPCOMMING EVENT,2021/05/21-22:56-22:58,YouTube,None,test,banner,None,None
 3,1,EVENT NEW,2021/05/30-15:30-17:00,Google Meet,30,123,banner,None,None
-4,2,EVENT ! ! !,2021/06/01-15:00-17:00,Zoom,300,???!!!!!???,banner,None,None
+4,2,EVENT ! ! !,2021/06/01-15:00-17:00,Zoom,300,???!!!!!???,banner,0,None
 5,0,MY___EVENT,2021/05/30-15:30-17:00,YouTube,None,this is my event,banner,2 1,None
 6,0,Todays Event,2021/05/22-17:30-19:30,Google Meet,50,Today,banner,1,None
 7,0,ANOTHER EVENT TODAY,2021/05/22-18:00-19:00,YouTube,None,ANOTHER EVENT TODAY,banner,2,None
@@ -12,3 +12,4 @@ event_id,host_id,title,date_time,venue,max_participants,description,banner,parti
 10,1,__event_title__,2021/05/22-22:00-23:00,Google Meet,50, ,banner,0,None
 11,0,event Attend,2021/05/23-01:00-02:00,Google Meet,100,"   
 ",banner,1,None
+12,1,ANOTHER EVENT,2021/05/23-03:10-04:10,Google Meet,30,........,banner,0,0

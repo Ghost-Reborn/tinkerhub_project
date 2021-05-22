@@ -324,7 +324,7 @@ def event_created():
     else:
             return render_template('method_not_allowed.html')
 
-#register event function
+#register event function route
 @app.route('/register_event')
 def register_event():
     if 'lid' in session:
@@ -346,7 +346,7 @@ def register_event():
     else:
         return render_template('method_not_allowed.html')
 
-#register event function
+#register event function route
 @app.route('/attend_event')
 def attend_event():
     if 'lid' in session:
@@ -370,11 +370,41 @@ def attend_event():
         user_db = pd.read_csv('database/user_db.csv')
         event_db.to_csv('database/event_db.csv', index=False)
         event_db = pd.read_csv('database/event_db.csv')
-        print(user_db[user_db.login_id == session['lid']])
         return '''<script>alert('Marked Attendance');window.location='/view_my_event?se_id='''+str(attended_eid)+''''</script>'''
     else:
         return render_template('method_not_allowed.html')
-    
+
+#cancel registration function route
+@app.route('/cancel_event')
+def cancel_event():
+    if 'lid' in session:
+        global user_db, event_db
+        cancel_eid = request.args.get('e_id')
+        my_event = get_my_events_df()
+        my_event = my_event[my_event.event_id == np.int64(cancel_eid)]
+        if my_event.live_status.tolist()[0] == 'Live':
+            return '''<script>alert('The Event has already started');window.location='/view_my_event?se_id='''+str(cancel_eid)+''''</script>'''
+        event_reg_list = user_db[user_db.login_id == session['lid']].events_reg.tolist()[0].split()
+        participants_reg_list = event_db[event_db.event_id == np.int64(cancel_eid)].participants_reg.tolist()[0].split()
+        event_reg_list.remove(cancel_eid)
+        participants_reg_list.remove(str(session['lid']))
+        if event_reg_list==[]:
+            event_reg_list='None'
+        else:
+            event_reg_list=' '.join(event_reg_list)
+        if participants_reg_list==[]:
+            participants_reg_list='None'
+        else:
+            participants_reg_list=' '.join(participants_reg_list)
+        user_db.at[user_db.login_id == session['lid'], 'events_reg'] = event_reg_list
+        event_db.at[event_db.event_id == np.int64(cancel_eid), 'participants_reg'] = participants_reg_list
+        user_db.to_csv('database/user_db.csv', index=False)
+        user_db = pd.read_csv('database/user_db.csv')
+        event_db.to_csv('database/event_db.csv', index=False)
+        event_db = pd.read_csv('database/event_db.csv')
+        return '''<script>alert('Canceled Event Registration');window.location='/my_events'</script>'''
+    else:
+        return render_template('method_not_allowed.html')
 
 #search event function route
 @app.route('/search_event', methods = ['post'])
