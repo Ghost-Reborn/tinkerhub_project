@@ -15,8 +15,8 @@
         <h3>Date: {{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</h3>
         <h3>Time: {{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</h3>
         <h4>Attendees: {{ i[13][0] }}, {{ i[13][1] }}</h4>
-        <a href="/cancel_event?e_id={{ i[0] }}">Cancel</a>
-        <a href="/attend_event?e_id={{ i[0] }}"></a>
+        <a href="/cancel_event?e_id={{ i[0] }}">Cancel Event Registration</a>
+        <a href="/attend_event?e_id={{ i[0] }}">Mark Attendance</a>
     {% endfor %}
 
 {% endblock %}

@@ -130,7 +130,7 @@ def get_my_events_df():
                 if len(count_down_min)<2:
                     count_down_min = '0'+str(count_down_min)
                 live_status_list.append(count_down_hr +':'+ count_down_min)
-            elif event_start_time<current_dt[-4:]<event_end_time:
+            elif event_start_time<=current_dt[-4:]<event_end_time:
                 live_status_list.append('Live')
     my_events_df['live_status'] = live_status_list
     my_events_df = my_events_df[my_events_df.live_status!=False]
@@ -182,11 +182,6 @@ def view_my_event():
     selected_eid = request.args.get('se_id')
     my_events_df = get_my_events_df()
     selected_event = my_events_df[my_events_df.event_id == np.int64(selected_eid)]
-    # ['event_id', 'host_id', 'title', 'date_time', 'venue', 'max_participants', 'description', 'banner', 'participants_reg',
-    #    'participants_atnd', 'fName', 'lName', 'participants_reg_num', 'participants_reg_name', 'participants_atnd_name', 'hr_start',
-    #    'm_start', 'hr_end', 'm_end', 'live_status']
-    # if (selected_event.event_fill_status == 'Filled').tolist()[0]:
-    #     return '''<script>alert('This Event is Full');window.location='/my_events'</script>'''
     return render_template('view_my_event.html', vals = selected_event.to_numpy())
 
 #create event page route
@@ -202,6 +197,8 @@ def create_event():
 def my_events():
     if 'lid' in session:
         my_events_df = get_my_events_df()
+        if len(my_events_df)==0:
+            return render_template('no_events_found.html')
         return render_template('my_events.html', vals = my_events_df.sort_values(by='date_time', ascending=True).to_numpy())
     else:
         return render_template('method_not_allowed.html')
@@ -346,6 +343,35 @@ def register_event():
         event_db.to_csv('database/event_db.csv', index=False)
         event_db = pd.read_csv('database/event_db.csv')
         return '''<script>alert('Registered to Event');window.location='/home'</script>'''
+    else:
+        return render_template('method_not_allowed.html')
+
+#register event function
+@app.route('/attend_event')
+def attend_event():
+    if 'lid' in session:
+        global user_db, event_db
+        attended_eid = request.args.get('e_id')
+        my_event = get_my_events_df()
+        my_event = my_event[my_event.event_id == np.int64(attended_eid)]
+        if my_event.live_status.tolist()[0] != 'Live':
+            return '''<script>alert("Event isn't Live yet");window.location='/view_my_event?se_id='''+str(attended_eid)+''''</script>'''
+        if attended_eid in user_db[user_db.login_id == session['lid']].events_atnd.tolist()[0].split():
+            return '''<script>alert('You already marked attendance for this event');window.location='/view_my_event?se_id='''+str(attended_eid)+''''</script>'''
+        if user_db[user_db.login_id == session['lid']].events_atnd.tolist()[0] == 'None':
+            user_db.at[user_db.login_id == session['lid'], 'events_atnd'] = attended_eid
+        else:
+            user_db.at[user_db.login_id == session['lid'], 'events_atnd'] = str(user_db.events_atnd[user_db['login_id'] == session['lid']].tolist()[0])+' '+str(attended_eid)
+        if event_db[event_db.event_id == np.int64(attended_eid)].participants_atnd.tolist()[0] == 'None':
+            event_db.at[event_db.event_id == np.int64(attended_eid), 'participants_atnd'] = str(session['lid'])
+        else:
+            event_db.at[event_db.event_id == np.int64(attended_eid), 'participants_atnd'] = str(event_db.participants_atnd[event_db['event_id'] == np.int64(attended_eid)].tolist()[0])+' '+str(session['lid'])
+        user_db.to_csv('database/user_db.csv', index=False)
+        user_db = pd.read_csv('database/user_db.csv')
+        event_db.to_csv('database/event_db.csv', index=False)
+        event_db = pd.read_csv('database/event_db.csv')
+        print(user_db[user_db.login_id == session['lid']])
+        return '''<script>alert('Marked Attendance');window.location='/view_my_event?se_id='''+str(attended_eid)+''''</script>'''
     else:
         return render_template('method_not_allowed.html')
     
