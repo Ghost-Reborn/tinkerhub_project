@@ -1,4 +1,4 @@
 login_id,fName,lName,email,phone,password,profile_pic,events_reg,events_atnd,events_host
-0,dummy,One,dummy@dummy.dum,9876543210,123456789,None,None,None,0 1 5 6 7
-1,dummy,Two,dummy2@dummy.dum,7899877895,0,None,1 5 6 8,None,2 3
+0,dummy,One,dummy@dummy.dum,9876543210,123456789,None,10,None,0 1 5 6 7 9
+1,dummy,Two,dummy2@dummy.dum,7899877895,0,None,1 5 6 8 9,None,2 3 10
 2,dummy,Three,dummy3@dummy.dum,9996663333,123456789,None,5 1 7,None,4 8

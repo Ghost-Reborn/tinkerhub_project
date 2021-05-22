@@ -127,6 +127,8 @@ def get_my_events_df():
                 count_down_min = str(count_down_%60)
                 if len(count_down_hr)<2:
                     count_down_hr = '0'+str(count_down_hr)
+                if len(count_down_min)<2:
+                    count_down_min = '0'+str(count_down_min)
                 live_status_list.append(count_down_hr +':'+ count_down_min)
             elif event_start_time<current_dt[-4:]<event_end_time:
                 live_status_list.append('Live')
@@ -174,6 +176,19 @@ def view_event():
         return '''<script>alert('This Event is Full');window.location='/home'</script>'''
     return render_template('view_event.html', vals = selected_event.to_numpy())
 
+#view event page route
+@app.route('/view_my_event')
+def view_my_event():
+    selected_eid = request.args.get('se_id')
+    my_events_df = get_my_events_df()
+    selected_event = my_events_df[my_events_df.event_id == np.int64(selected_eid)]
+    # ['event_id', 'host_id', 'title', 'date_time', 'venue', 'max_participants', 'description', 'banner', 'participants_reg',
+    #    'participants_atnd', 'fName', 'lName', 'participants_reg_num', 'participants_reg_name', 'participants_atnd_name', 'hr_start',
+    #    'm_start', 'hr_end', 'm_end', 'live_status']
+    # if (selected_event.event_fill_status == 'Filled').tolist()[0]:
+    #     return '''<script>alert('This Event is Full');window.location='/my_events'</script>'''
+    return render_template('view_my_event.html', vals = selected_event.to_numpy())
+
 #create event page route
 @app.route('/create_event')
 def create_event():
@@ -187,7 +202,7 @@ def create_event():
 def my_events():
     if 'lid' in session:
         my_events_df = get_my_events_df()
-        return render_template('my_events.html', vals = my_events_df.to_numpy())
+        return render_template('my_events.html', vals = my_events_df.sort_values(by='date_time', ascending=True).to_numpy())
     else:
         return render_template('method_not_allowed.html')
 
@@ -215,128 +230,161 @@ def login():
 #logout function route
 @app.route('/logout')
 def logout():
-    session.clear()
-    return '''<script>window.location='/'</script>'''
+    if 'lid' in session:
+        session.clear()
+        return '''<script>window.location='/'</script>'''
+    else:
+        return render_template('method_not_allowed.html')
 
 #sign up funtion route
 @app.route('/signing_up', methods = ['post'])
 def signing_up():
-    global user_db
-    signup_fname = request.form['sign_up-fname']
-    signup_lname = request.form['sign_up-lname']
-    signup_email = request.form['sign_up-email']
-    signup_phone = request.form['sign_up-phone']
-    signup_pswd1 = request.form['sign_up-pswd-1']
-    signup_pswd2 = request.form['sign_up-pswd-2']
-    if signup_email in np.array(user_db.email):
-        return '''<script>alert('This Email is already in use');window.location='/sign_up'</script>'''
-    if signup_phone in np.array(user_db.phone):
-        return '''<script>alert('This Phone Number is already in use');window.location='/sign_up'</script>'''
-    if signup_pswd1!=signup_pswd2:
-        return '''<script>alert('Passwords not Matching');window.location='/sign_up'</script>'''
-    elif signup_pswd1==signup_pswd2:
-        if user_db.login_id.max()>=0:
-            next_uid = user_db.login_id.max() + 1
+    if 'lid' in session:
+        global user_db
+        signup_fname = request.form['sign_up-fname']
+        signup_lname = request.form['sign_up-lname']
+        signup_email = request.form['sign_up-email']
+        signup_phone = request.form['sign_up-phone']
+        signup_pswd1 = request.form['sign_up-pswd-1']
+        signup_pswd2 = request.form['sign_up-pswd-2']
+        if signup_email in np.array(user_db.email):
+            return '''<script>alert('This Email is already in use');window.location='/sign_up'</script>'''
+        if signup_phone in np.array(user_db.phone):
+            return '''<script>alert('This Phone Number is already in use');window.location='/sign_up'</script>'''
+        if signup_pswd1!=signup_pswd2:
+            return '''<script>alert('Passwords not Matching');window.location='/sign_up'</script>'''
+        elif signup_pswd1==signup_pswd2:
+            if user_db.login_id.max()>=0:
+                next_uid = user_db.login_id.max() + 1
+            else:
+                next_uid = 0
+            data = [{'login_id': next_uid, 'fName': signup_fname, 'lName': signup_lname, 'email': signup_email,
+                    'phone': signup_phone, 'password': signup_pswd1, 'profile_pic': 'None',
+                    'events_reg': 'None', 'events_atnd': 'None', 'events_host': 'None'}]
+            user_db = user_db.append(data, ignore_index=True, sort=False)
+            user_db.to_csv('database/user_db.csv', index=False)
+            user_db = pd.read_csv('database/user_db.csv')
+            return '''<script>alert('Signing Up');window.location='/'</script>'''
         else:
-            next_uid = 0
-        data = [{'login_id': next_uid, 'fName': signup_fname, 'lName': signup_lname, 'email': signup_email,
-                'phone': signup_phone, 'password': signup_pswd1, 'profile_pic': 'None',
-                'events_reg': 'None', 'events_atnd': 'None', 'events_host': 'None'}]
-        user_db = user_db.append(data, ignore_index=True, sort=False)
-        user_db.to_csv('database/user_db.csv', index=False)
-        user_db = pd.read_csv('database/user_db.csv')
-        return '''<script>alert('Signing Up');window.location='/'</script>'''
+            return '''<script>alert('Error');window.location='/sign_up'</script>'''
     else:
-        return '''<script>alert('Error');window.location='/sign_up'</script>'''
+            return render_template('method_not_allowed.html')
 
 #event creation function route
 @app.route('/event_created', methods = ['post'])
 def event_created():
-    global event_db
-    if event_db.event_id.max()>=0:
-        next_eid = event_db.event_id.max() + 1
+    if 'lid' in session:
+        global event_db
+        if event_db.event_id.max()>=0:
+            next_eid = event_db.event_id.max() + 1
+        else:
+            next_eid = 0
+        create_event_title = request.form['create-event-title']
+        create_event_description = request.form['create-event-description']
+        create_event_banner = request.files['create-event-banner']
+        if create_event_banner.filename != '':
+            time = datetime.now().strftime('%Y%m%d%H%M%S')
+            create_event_banner_name = str(next_eid) + time
+            create_event_banner.save(os.path.join('static/images/banners', create_event_banner_name+'.png'))
+        else:
+            create_event_banner_name = 'banner'
+        create_event_date = request.form['create-event-date']
+        create_event_time1 = request.form['create-event-time1']
+        create_event_time2 = request.form['create-event-time2']
+        create_event_venue = request.form['create-event-venue']
+        create_event_max = request.form['create-event-max_participants']
+        if create_event_max == '':
+            create_event_max = 'None'
+        elif int(create_event_max)<5:
+                return '''<script>alert('Event should have atleast 5 members');window.location='/create_event'</script>'''
+        date_time = create_event_date[:4]+create_event_date[5:7]+create_event_date[8:]+create_event_time1[:2]+create_event_time1[-2:]+create_event_time2[:2]+create_event_time2[-2:]
+        time_start = date_time[-8:-4]
+        time_end = date_time[-4:]
+        date = date_time[:8]
+        time_crnt = datetime.now().strftime('%H%M')
+        date_crnt = datetime.now().strftime('%Y%m%d')
+        if date_crnt>date:
+            return '''<script>alert('Event Date should be after or on Current Date');window.location='/create_event'</script>'''
+        if date_crnt + time_crnt > date + time_start:
+            return '''<script>alert('Event Starting Time should be after Current Time');window.location='/create_event'</script>'''
+        if  date + time_start > date + time_end:
+            return '''<script>alert('Event Starting Time should be before Ending Time');window.location='/create_event'</script>'''
+        date_time = create_event_date[:4]+'/'+create_event_date[5:7]+'/'+create_event_date[8:]+'-'+create_event_time1[:2]+':'+create_event_time1[-2:]+'-'+create_event_time2[:2]+':'+create_event_time2[-2:]
+        data = [{'event_id': next_eid, 'host_id': session['lid'], 'title' : create_event_title, 'date_time' : date_time,
+                'venue': create_event_venue, 'max_participants' : create_event_max, 'description' : create_event_description,
+                'banner' : create_event_banner_name, 'participants_reg' : 'None', 'participants_atnd' : 'None'}]
+        event_db = event_db.append(data, ignore_index=True, sort=False)
+        global user_db
+        if user_db[user_db.login_id == session['lid']].events_host.tolist()[0] == 'None':
+            user_db.at[user_db.login_id == session['lid'], 'events_host'] = next_eid
+        else:
+            user_db.at[user_db.login_id == session['lid'], 'events_host'] = str(user_db.events_host[user_db['login_id'] == session['lid']].tolist()[0])+' '+str(next_eid)
+        event_db.to_csv('database/event_db.csv', index=False)
+        event_db = pd.read_csv('database/event_db.csv')
+        user_db.to_csv('database/user_db.csv', index=False)
+        user_db = pd.read_csv('database/user_db.csv')
+        return '''<script>alert('Event Registered');window.location='/home'</script>'''
     else:
-        next_eid = 0
-    create_event_title = request.form['create-event-title']
-    create_event_description = request.form['create-event-description']
-    create_event_banner = request.files['create-event-banner']
-    if create_event_banner.filename != '':
-        time = datetime.now().strftime('%Y%m%d%H%M%S')
-        create_event_banner_name = str(next_eid) + time
-        create_event_banner.save(os.path.join('static/images/banners', create_event_banner_name+'.png'))
-    else:
-        create_event_banner_name = 'banner'
-    create_event_date = request.form['create-event-date']
-    create_event_time1 = request.form['create-event-time1']
-    create_event_time2 = request.form['create-event-time2']
-    create_event_venue = request.form['create-event-venue']
-    create_event_max = request.form['create-event-max_participants']
-    if create_event_max == '':
-        create_event_max = 'None'
-    elif int(create_event_max)<5:
-            return '''<script>alert('Event should have atleast 5 members');window.location='/create_event'</script>'''
-    date_time = create_event_date[:4]+create_event_date[5:7]+create_event_date[8:]+create_event_time1[:2]+create_event_time1[-2:]+create_event_time2[:2]+create_event_time2[-2:]
-    time_start = date_time[-8:-4]
-    time_end = date_time[-4:]
-    date = date_time[:8]
-    time_crnt = datetime.now().strftime('%H%M')
-    date_crnt = datetime.now().strftime('%Y%m%d')
-    if date_crnt>date:
-        return '''<script>alert('Event Date should be after or on Current Date');window.location='/create_event'</script>'''
-    if date_crnt + time_crnt > date + time_start:
-        return '''<script>alert('Event Starting Time should be after Current Time');window.location='/create_event'</script>'''
-    if  date + time_start > date + time_end:
-        return '''<script>alert('Event Starting Time should be before Ending Time');window.location='/create_event'</script>'''
-    date_time = create_event_date[:4]+'/'+create_event_date[5:7]+'/'+create_event_date[8:]+'-'+create_event_time1[:2]+':'+create_event_time1[-2:]+'-'+create_event_time2[:2]+':'+create_event_time2[-2:]
-    data = [{'event_id': next_eid, 'host_id': session['lid'], 'title' : create_event_title, 'date_time' : date_time,
-            'venue': create_event_venue, 'max_participants' : create_event_max, 'description' : create_event_description,
-            'banner' : create_event_banner_name, 'participants_reg' : 'None', 'participants_atnd' : 'None'}]
-    event_db = event_db.append(data, ignore_index=True, sort=False)
-    global user_db
-    if user_db[user_db.login_id == session['lid']].events_host.tolist()[0] == 'None':
-        user_db.at[user_db.login_id == session['lid'], 'events_host'] = next_eid
-    else:
-        user_db.at[user_db.login_id == session['lid'], 'events_host'] = str(user_db.events_host[user_db['login_id'] == session['lid']].tolist()[0])+' '+str(next_eid)
-    event_db.to_csv('database/event_db.csv', index=False)
-    event_db = pd.read_csv('database/event_db.csv')
-    user_db.to_csv('database/user_db.csv', index=False)
-    user_db = pd.read_csv('database/user_db.csv')
-    return '''<script>alert('Event Registered');window.location='/home'</script>'''
+            return render_template('method_not_allowed.html')
 
 #register event function
 @app.route('/register_event')
 def register_event():
-    global user_db, event_db
-    register_eid = request.args.get('e_id')
-    if user_db[user_db.login_id == session['lid']].events_reg.tolist()[0] == 'None':
-        user_db.at[user_db.login_id == session['lid'], 'events_reg'] = register_eid
+    if 'lid' in session:
+        global user_db, event_db
+        register_eid = request.args.get('e_id')
+        if user_db[user_db.login_id == session['lid']].events_reg.tolist()[0] == 'None':
+            user_db.at[user_db.login_id == session['lid'], 'events_reg'] = register_eid
+        else:
+            user_db.at[user_db.login_id == session['lid'], 'events_reg'] = str(user_db.events_reg[user_db['login_id'] == session['lid']].tolist()[0])+' '+str(register_eid)
+        if event_db[event_db.event_id == np.int64(register_eid)].participants_reg.tolist()[0] == 'None':
+            event_db.at[event_db.event_id == np.int64(register_eid), 'participants_reg'] = str(session['lid'])
+        else:
+            event_db.at[event_db.event_id == np.int64(register_eid), 'participants_reg'] = str(event_db.participants_reg[event_db['event_id'] == np.int64(register_eid)].tolist()[0])+' '+str(session['lid'])
+        user_db.to_csv('database/user_db.csv', index=False)
+        user_db = pd.read_csv('database/user_db.csv')
+        event_db.to_csv('database/event_db.csv', index=False)
+        event_db = pd.read_csv('database/event_db.csv')
+        return '''<script>alert('Registered to Event');window.location='/home'</script>'''
     else:
-        user_db.at[user_db.login_id == session['lid'], 'events_reg'] = str(user_db.events_reg[user_db['login_id'] == session['lid']].tolist()[0])+' '+str(register_eid)
-    if event_db[event_db.event_id == np.int64(register_eid)].participants_reg.tolist()[0] == 'None':
-        event_db.at[event_db.event_id == np.int64(register_eid), 'participants_reg'] = str(session['lid'])
-    else:
-        event_db.at[event_db.event_id == np.int64(register_eid), 'participants_reg'] = str(event_db.participants_reg[event_db['event_id'] == np.int64(register_eid)].tolist()[0])+' '+str(session['lid'])
-    user_db.to_csv('database/user_db.csv', index=False)
-    user_db = pd.read_csv('database/user_db.csv')
-    event_db.to_csv('database/event_db.csv', index=False)
-    event_db = pd.read_csv('database/event_db.csv')
-    return '''<script>alert('Registered to Event');window.location='/home'</script>'''
+        return render_template('method_not_allowed.html')
+    
 
 #search event function route
 @app.route('/search_event', methods = ['post'])
 def search_event():
-    s_event_name = request.form['seach_title']
-    home_df = get_home_df()
-    home_df = home_df[home_df.title == s_event_name]
-    if len(home_df)==0:
-        return render_template('no_events_found.html')
-    return render_template('search_results.html', vals= home_df.sort_values(by='event_id', ascending=False).to_numpy())
-# /view_event?se_id=
+    if 'lid' in session:
+        s_event_name = request.form['seach_title']
+        home_df = get_home_df()
+        home_df = home_df[home_df.title == s_event_name]
+        if len(home_df)==0:
+            return render_template('no_events_found.html')
+        return render_template('search_results.html', vals= home_df.sort_values(by='event_id', ascending=False).to_numpy())
+    else:
+        return render_template('method_not_allowed.html')
+
+#search my event function route
+@app.route('/search_my_event', methods = ['post'])
+def search_my_event():
+    if 'lid' in session:
+        s_event_name = request.form['seach_title']
+        my_events_df = get_my_events_df()
+        my_events_df = my_events_df[my_events_df.title == s_event_name]
+        if len(my_events_df)==0:
+            return render_template('no_events_found.html')
+        return render_template('search_results_mine.html', vals= my_events_df.sort_values(by='date_time', ascending=True).to_numpy())
+    else:
+        return render_template('method_not_allowed.html')
 
 #handling error 404
 @app.errorhandler(404)
 def error_404(e):
     return render_template('page_notfound.html')
+
+#handling error 405
+@app.errorhandler(405)
+def error_405(e):
+    return render_template('method_not_allowed.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

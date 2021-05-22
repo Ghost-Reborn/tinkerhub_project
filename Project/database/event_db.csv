@@ -8,3 +8,5 @@ event_id,host_id,title,date_time,venue,max_participants,description,banner,parti
 6,0,Todays Event,2021/05/22-17:30-19:30,Google Meet,50,Today,banner,1,None
 7,0,ANOTHER EVENT TODAY,2021/05/22-18:00-19:00,YouTube,None,ANOTHER EVENT TODAY,banner,2,None
 8,2,To Come,2021/05/22-19:30-21:00,Google Meet,100,Event to come,banner,1,None
+9,0,ADITH MAIN,2021/05/22-22:30-23:30,YouTube,None,......,920210522215614,1,None
+10,1,__event_title__,2021/05/22-22:00-23:00,Google Meet,50, ,banner,0,None
