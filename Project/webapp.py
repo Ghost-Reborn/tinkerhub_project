@@ -266,6 +266,14 @@ def change_pswd():
     else:
         return render_template('method_not_allowed.html')
 
+#change dp page route
+@app.route('/change_dp')
+def change_dp():
+    if 'lid' in session:
+        return render_template('change_dp.html')
+    else:
+        return render_template('method_not_allowed.html')
+
 #login function route
 @app.route('/login', methods = ['post'])
 def login():
@@ -291,36 +299,33 @@ def logout():
 #sign up funtion route
 @app.route('/signing_up', methods = ['post'])
 def signing_up():
-    if 'lid' in session:
-        global user_db
-        signup_fname = request.form['sign_up-fname']
-        signup_lname = request.form['sign_up-lname']
-        signup_email = request.form['sign_up-email']
-        signup_phone = request.form['sign_up-phone']
-        signup_pswd1 = request.form['sign_up-pswd-1']
-        signup_pswd2 = request.form['sign_up-pswd-2']
-        if signup_email in np.array(user_db.email):
-            return '''<script>alert('This Email is already in use');window.location='/sign_up'</script>'''
-        if signup_phone in np.array(user_db.phone):
-            return '''<script>alert('This Phone Number is already in use');window.location='/sign_up'</script>'''
-        if signup_pswd1!=signup_pswd2:
-            return '''<script>alert('Passwords not Matching');window.location='/sign_up'</script>'''
-        elif signup_pswd1==signup_pswd2:
-            if user_db.login_id.max()>=0:
-                next_uid = user_db.login_id.max() + 1
-            else:
-                next_uid = 0
-            data = [{'login_id': next_uid, 'fName': signup_fname, 'lName': signup_lname, 'email': signup_email,
-                    'phone': signup_phone, 'password': signup_pswd1, 'profile_pic': 'None',
-                    'events_reg': 'None', 'events_atnd': 'None', 'events_host': 'None'}]
-            user_db = user_db.append(data, ignore_index=True, sort=False)
-            user_db.to_csv('database/user_db.csv', index=False)
-            user_db = pd.read_csv('database/user_db.csv')
-            return '''<script>alert('Signing Up');window.location='/'</script>'''
+    global user_db
+    signup_fname = request.form['sign_up-fname']
+    signup_lname = request.form['sign_up-lname']
+    signup_email = request.form['sign_up-email']
+    signup_phone = request.form['sign_up-phone']
+    signup_pswd1 = request.form['sign_up-pswd-1']
+    signup_pswd2 = request.form['sign_up-pswd-2']
+    if signup_email in np.array(user_db.email):
+        return '''<script>alert('This Email is already in use');window.location='/sign_up'</script>'''
+    if signup_phone in np.array(user_db.phone):
+        return '''<script>alert('This Phone Number is already in use');window.location='/sign_up'</script>'''
+    if signup_pswd1!=signup_pswd2:
+        return '''<script>alert('Passwords not Matching');window.location='/sign_up'</script>'''
+    elif signup_pswd1==signup_pswd2:
+        if user_db.login_id.max()>=0:
+            next_uid = user_db.login_id.max() + 1
         else:
-            return '''<script>alert('Error');window.location='/sign_up'</script>'''
+            next_uid = 0
+        data = [{'login_id': next_uid, 'fName': signup_fname, 'lName': signup_lname, 'email': signup_email,
+                'phone': signup_phone, 'password': signup_pswd1, 'profile_pic': 'None',
+                'events_reg': 'None', 'events_atnd': 'None', 'events_host': 'None'}]
+        user_db = user_db.append(data, ignore_index=True, sort=False)
+        user_db.to_csv('database/user_db.csv', index=False)
+        user_db = pd.read_csv('database/user_db.csv')
+        return '''<script>alert('Signing Up');window.location='/'</script>'''
     else:
-            return render_template('method_not_allowed.html')
+        return '''<script>alert('Error');window.location='/sign_up'</script>'''
 
 #event creation function route
 @app.route('/event_created', methods = ['post'])
@@ -506,6 +511,26 @@ def update_profile():
     else:
         return render_template('method_not_allowed.html')
 
+#update profile function route
+@app.route('/update_password', methods = ['post'])
+def update_password():
+    if 'lid' in session:
+        global user_db
+        update_pswd1 = request.form['update-pswd-1']
+        update_pswd2 = request.form['update-pswd-2']
+        update_pswd3 = request.form['update-pswd-3']
+        if str(user_db[user_db.login_id == session['lid']].password.tolist()[0]) != update_pswd1:
+            return '''<script>alert('Incorrect Password');window.location='/change_pswd'</script>'''
+        if update_pswd2!=update_pswd3:
+            return '''<script>alert('Passwords not Matching');window.location='/change_pswd'</script>'''
+        if update_pswd1 == update_pswd2:
+            return '''<script>alert("New Password can't be Old Password");window.location='/change_pswd'</script>'''
+        user_db.at[user_db.login_id == session['lid'], 'password'] = update_pswd2
+        user_db.to_csv('database/user_db.csv', index=False)
+        user_db = pd.read_csv('database/user_db.csv')
+        return '''<script>alert('Password Changed Login to continue');window.location='/logout'</script>'''
+    else:
+        return render_template('method_not_allowed.html')
 
 #handling error 404
 @app.errorhandler(404)

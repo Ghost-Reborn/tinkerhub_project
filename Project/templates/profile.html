@@ -2,7 +2,7 @@
 {% block body %}
 <!-- ['login_id', 'fName', 'lName', 'email', 'phone', 'password', 'profile_pic', 'events_reg', 'events_atnd', 'events_host'] -->
 
-    <img src="../static/images/profile_pictures/{{val[6]}}.png">
+    <a href="/change_dp"><img src="../static/images/profile_pictures/{{val[6]}}.png"></a>
     <h1>{{ val[1]+' '+val[2] }}</h1>
     <h3>{{ val[3] }}</h3>
     <h3>{{ val[4] }}</h3>
