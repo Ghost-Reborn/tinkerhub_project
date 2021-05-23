@@ -231,7 +231,7 @@ def view_profile():
     else:
         return render_template('method_not_allowed.html')
 
-#view participants route
+#view participants page route
 @app.route('/view_participants')
 def view_participants():
     if 'lid' in session:
@@ -246,8 +246,23 @@ def view_participants():
                 return lid, name.fName.tolist()[0] + ' ' + name.lName.tolist()[0]
             for i in event_attendees:
                 event_attendees_name.append(get_fullName(i))
-        print(event_attendees_name)
         return render_template('view_attendees.html', val=event_attendees_name, event=event)
+    else:
+        return render_template('method_not_allowed.html')
+
+#update profile page route
+@app.route('/edit_profile')
+def edit_profile():
+    if 'lid' in session:
+        return render_template('update_profile.html')
+    else:
+        return render_template('method_not_allowed.html')
+
+#change password page route
+@app.route('/change_pswd')
+def change_pswd():
+    if 'lid' in session:
+        return render_template('change_password.html')
     else:
         return render_template('method_not_allowed.html')
 
@@ -471,6 +486,26 @@ def search_my_event():
         return render_template('search_results_mine.html', vals= my_events_df.sort_values(by='date_time', ascending=True).to_numpy())
     else:
         return render_template('method_not_allowed.html')
+
+#update profile function route
+@app.route('/update_profile', methods = ['post'])
+def update_profile():
+    if 'lid' in session:
+        global user_db
+        update_fname = request.form['update-fname']
+        update_lname = request.form['update-lname']
+        update_email = request.form['update-email']
+        update_phone = request.form['update-phone']
+        user_db.at[user_db.login_id == session['lid'], 'fName'] = update_fname
+        user_db.at[user_db.login_id == session['lid'], 'lName'] = update_lname
+        user_db.at[user_db.login_id == session['lid'], 'email'] = update_email
+        user_db.at[user_db.login_id == session['lid'], 'phone'] = update_phone
+        user_db.to_csv('database/user_db.csv', index=False)
+        user_db = pd.read_csv('database/user_db.csv')
+        return '''<script>alert('Profile Updated');window.location='/profile'</script>'''
+    else:
+        return render_template('method_not_allowed.html')
+
 
 #handling error 404
 @app.errorhandler(404)

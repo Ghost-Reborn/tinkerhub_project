@@ -1,0 +1,12 @@
+{% extends 'index.html' %}
+{% block body %}
+
+    <form method="post" action="/update_profile">
+        <input type="text" required placeholder="First Name" autofocus name="update-fname">
+        <input type="text" placeholder="Last Name" name="update-lname">
+        <input type="email" required placeholder="Email" name="update-email">
+        <input type="text" required pattern="[0-9]{10}" title="Please Enter your 10 digit Phone Number"placeholder="Phone" name="update-phone">
+        <input type="submit" value="Update Profile">
+    </form>
+
+{% endblock %}
