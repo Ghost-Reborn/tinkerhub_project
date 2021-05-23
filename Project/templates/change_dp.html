@@ -1,6 +1,10 @@
 {% extends 'index.html' %}
 {% block body %}
 
-    
+    <form method="post", action="/update_dp" enctype="multipart/form-data">
+        <input type="file" required id="update-dp" name="update-dp">
+        <input type="submit" value="Update Password">
+    </form>
+
 
 {% endblock %}

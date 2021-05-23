@@ -1,13 +1,13 @@
 {% extends 'index.html' %}
 {% block body %}
     <form method="post", action="/event_created" enctype="multipart/form-data">
-        <input type="text" required placeholder="Title" name="create-event-title">
-        <textarea placeholder="Enter description..." required name="create-event-description"></textarea>
-        Banner<input type="file" name="create-event-banner">
-        Date<input type="date" required name="create-event-date">
-        Time<input type="time" required name="create-event-time1">to<input type="time" required name="create-event-time2">
-        <input type="text" placeholder="Location" required name="create-event-venue">
-        <input type="number" placeholder="Maximum Participants" name="create-event-max_participants">
+        <input type="text" required placeholder="Title" id="create-event-title" name="create-event-title">
+        <textarea placeholder="Enter description..." required id="create-event-description" name="create-event-description"></textarea>
+        Banner<input type="file" id="create-event-banner" name="create-event-banner">
+        Date<input type="date" required id="create-event-date" name="create-event-date">
+        Time<input type="time" required id="create-event-time1" name="create-event-time1">to<input type="time" required id="create-event-time2" name="create-event-time2">
+        <input type="text" placeholder="Location" required id="create-event-venue" name="create-event-venue">
+        <input type="number" placeholder="Maximum Participants" id="create-event-max_participants" name="create-event-max_participants">
         <input type="submit" value="Register Event">
     </form>
 {% endblock %}

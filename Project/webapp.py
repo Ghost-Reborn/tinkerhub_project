@@ -532,6 +532,22 @@ def update_password():
     else:
         return render_template('method_not_allowed.html')
 
+#update dp function route
+@app.route('/update_dp', methods=['post'])
+def update_dp():
+    if 'lid' in session:
+        global user_db
+        update_dp_img = request.files['update-dp']
+        time = datetime.now().strftime('%Y%m%d%H%M%S')
+        update_dp_img_name = str(session['lid']) + time
+        update_dp_img.save(os.path.join('static/images/profile_pictures', update_dp_img_name+'.png'))
+        user_db.at[user_db.login_id == session['lid'], 'profile_pic'] = update_dp_img_name
+        user_db.to_csv('database/user_db.csv', index=False)
+        user_db = pd.read_csv('database/user_db.csv')
+        return '''<script>alert('Profile Picture Updated');window.location='/profile'</script>'''
+    else:
+        return render_template('method_not_allowed.html')
+
 #handling error 404
 @app.errorhandler(404)
 def error_404(e):
