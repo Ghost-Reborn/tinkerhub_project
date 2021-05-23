@@ -1,9 +1,14 @@
 {% extends 'index.html' %}
 {% block body %}
 
+    <h1>{{ event[2] }}</h1>
+    <h3>{{ event[10] + ' ' + event[11] }}</h3>
+    <h3>{{ event[3][8:10]+'/'+event[3][5:7]+'/'+event[3][:4] }}</h3>
+    <h3>{{ event[15]+':'+event[3][14:16]+' '+event[16]+' to '+event[17]+':'+event[3][20:22]+' '+event[18] }}</h3>
+
     <ul>
     {% for i in val %}
-        <li>{{ i }}</li>
+        <li><a href="/view_profile?s_lid={{i[0]}}">{{ i[1] }}</a></li>
     {% endfor %}
     </ul>
 

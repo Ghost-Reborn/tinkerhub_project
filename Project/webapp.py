@@ -207,7 +207,6 @@ def my_events():
 @app.route('/profile')
 def profile():
     if 'lid' in session:
-        global user_db
         joined_df = get_joined_df()
         user = user_db[user_db.login_id == session['lid']]
         attended = user.events_atnd.tolist()[0].split()
@@ -223,20 +222,32 @@ def profile():
     else:
         return render_template('method_not_allowed.html')
 
+#profile page route
+@app.route('/view_profile')
+def view_profile():
+    if 'lid' in session:
+        user_id = np.int64(request.args.get('s_lid'))
+        return render_template('view_profile.html', val=user_db[user_db.login_id == user_id].to_numpy()[0])
+    else:
+        return render_template('method_not_allowed.html')
+
 #view participants route
 @app.route('/view_participants')
 def view_participants():
     if 'lid' in session:
         s_event_id = request.args.get('e_id')
+        joined_df = get_joined_df()
         event_attendees = event_db[event_db.event_id == np.int64(s_event_id)].participants_atnd.tolist()[0].split()
-        if event_attendees==['None']:
-            event_attendees = []
-        else:
+        event = np.array(joined_df[joined_df.event_id == np.int64(s_event_id)])[0].tolist()
+        event_attendees_name = []
+        if event_attendees!=['None']:
             def get_fullName(lid):
-                return user_db
+                name = user_db[user_db.login_id == np.int64(lid)][['fName', 'lName']]
+                return lid, name.fName.tolist()[0] + ' ' + name.lName.tolist()[0]
             for i in event_attendees:
-                print(get_fullName(i))
-        return render_template('view_attendees.html', val=event_attendees)
+                event_attendees_name.append(get_fullName(i))
+        print(event_attendees_name)
+        return render_template('view_attendees.html', val=event_attendees_name, event=event)
     else:
         return render_template('method_not_allowed.html')
 
