@@ -1,4 +1,59 @@
 {% extends 'index.html' %}
 {% block body %}
-profile
+<!-- ['login_id', 'fName', 'lName', 'email', 'phone', 'password', 'profile_pic', 'events_reg', 'events_atnd', 'events_host'] -->
+
+    <img src="../static/images/profile_pictures/{{val[6]}}.png">
+    <h1>{{ val[1]+' '+val[2] }}</h1>
+    <h3>{{ val[3] }}</h3>
+    <h3>{{ val[4] }}</h3>
+
+    <a href="/update_profile?lid={{val[0]}}">Update Profile</a>
+    <a href="/change_pswd?lid={{val[0]}}">Change Password</a>
+
+    <table>
+        <caption>Events Attended</caption>
+        <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Host</th>
+            <th>Venue</th>
+            <th>Participants</th>
+        </tr>
+        {% for i in val_atnd %}
+        <tr>
+            <td>{{ i[2] }}</td>
+            <td>{{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</td>
+            <td>{{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</td>
+            <td>{{ i[10] + ' ' + i[11] }}</td>
+            <td>{{ i[4] }}</td>
+            <td><a href="/view_participants?e_id={{i[0]}}">View</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <table>
+        <caption>Events Hosted</caption>
+        <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Venue</th>
+            <th>Participants</th>
+        </tr>
+        {% for i in val_host %}
+        <tr>
+            <td>{{ i[2] }}</td>
+            <td>{{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</td>
+            <td>{{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</td>
+            <td>{{ i[4] }}</td>
+            <td><a href="/view_participants?e_id={{i[0]}}">View</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!--['event_id', 'host_id', 'title', 'date_time', 'venue', 'max_participants', 'description', 'banner',
+    'participants_reg','participants_atnd', 'fName', 'lName', 'participants_reg_num', 'participants_reg_name',
+    'participants_atnd_name','hr_start', 'm_start', 'hr_end', 'm_end', 'event_fill_status'] -->
+
 {% endblock %}
