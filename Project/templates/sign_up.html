@@ -6,21 +6,200 @@
         <title>Event Manager - Sign Up</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="{{ url_for('static', filename='css/main_style.css') }}" rel="stylesheet">
+        <style>
+            html, body{
+                height: 100vh;
+                background-image: linear-gradient(150deg,rgb(149,191,21), rgb(255,205,16));
+            }
+            body{
+                height: 50%;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }
+
+            form{
+                width: 75vw;
+                height: 82vh;
+                margin: 9vh auto 0 auto;
+                padding-bottom: 5vh;
+                display: flex;
+                flex-direction: column;
+                border-radius: 1vw;
+                background: #FFFE;
+            }
+            .row{
+                display: flex;
+                flex-direction: column;
+            }
+            .pswd{
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                }
+            
+            h2{
+                font-size: 8vw;
+                margin-top: 8%;
+                margin-bottom: 1%;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+            
+            input{
+                width: 80%;
+                height: 4vh;
+                padding-left: 3%;
+                margin: 7% auto 0 auto;
+                color: rgb(32,91,103);
+                border: 1px solid rgba(32,91,103, 0.6);
+                outline: 0;
+                display: block;
+                background: none;
+            }input::placeholder{color: rgba(32,91,103, 0.5);}input:focus{
+                background: white;
+                border: 2px solid rgba(255,205,16, 0.4);
+            }
+            
+            .signup-pswd{margin-bottom: 1%;}
+            
+
+            .signup-switch-pswd{
+                margin-right: 9%;
+                text-align: right;
+                font-size: 4vw;
+                color: rgb(149,191,21);
+                cursor: pointer;
+            }
+            
+            #signup-btn{
+                height: 6%;
+                margin-top: 7%;
+                background: rgb(32,91,103);
+                color: white;
+                font-size: 4.2vw;
+                font-weight: 750;
+                border: 0;
+                cursor: pointer;
+                border-radius: 0.5vw;
+            }
+            
+            #prompt{margin-top: 5%;}
+
+            a{
+                padding: 0;
+                margin-top: 2%;
+                color: rgb(0,96,255);
+                font-weight: 600;
+                text-decoration: none;
+                outline: 0;
+            }
+
+            @media screen and (orientation: landscape)
+            {
+                form{
+                    width: 72vw;
+                    height: 80vh;
+                }
+                .row{
+
+                    display: flex;
+                    flex-direction: row;
+                }
+                .pswd{
+                    width: 50%;
+                    flex-direction: column;
+                }
+
+                h2{
+                    margin: 4% auto 3% auto;
+                    font-size: 3vw;
+                }
+
+                input{
+                    width: 36%;
+                    height: 5vh;
+                    margin: 3% auto;
+                    font-size: 1.3vw;
+                }
+                .pswd input{
+                    width: 75%;
+                }
+
+                .signup-switch-pswd{font-size: 1.25vw;}
+
+                #signup-btn{
+                    width: 25vw;
+                    height: 7vh;
+                    margin: 3.6% auto 1% auto;
+                    font-size: 1.75vw;
+                }
+
+                #prompt{
+                    margin-top: 1.1%;
+                    font-size: 1.5vw;
+                }
+
+                a{
+                    margin-top: 1%;
+                    font-size: 2vw;
+                }
+            }
+
+            @media screen and (min-width: 1080px)
+            {
+                h2{margin: 3% auto 2% auto;}
+
+                input{
+                    height: 7.2vh;
+                    margin: 2% auto;
+                }
+
+                .signup-switch-pswd{font-size: 1.25vw;}
+
+                #signup-btn{
+                    width: 18vw;
+                    height: 8%;
+                    margin: 3% auto 0 auto;
+                    font-size: 1.75vw;
+                }
+
+                #prompt{
+                    margin-top: 1.5%;
+                    font-size: 1.2vw;
+                }
+
+                a{
+                    margin-top: 0;
+                    font-size: 1.5vw;
+                }
+            }
+        </style>
     </head>
     <body>
         <form method="post" action="/signing_up">
-            <input type="text" required placeholder="First Name" autofocus name="sign_up-fname">
-            <input type="text" placeholder="Last Name" name="sign_up-lname">
-            <input type="email" required placeholder="Email" name="sign_up-email">
-            <input type="text" required pattern="[0-9]{10}" title="Please Enter your 10 digit Phone Number"placeholder="Phone" name="sign_up-phone">
-            <input type="password" required pattern=".{8,}" title="Password should contain atleast 8 characters" placeholder="Password" name="sign_up-pswd-1" id="sign_up-pswd-1">
-            <span onclick="showPassword('sign_up-pswd-1')" id='sign_up-switch-pswd-1'>Show Password</span>
-            <input type="password" required placeholder="Confirm Password" name="sign_up-pswd-2" id="sign_up-pswd-2">
-            <span onclick="showPassword('sign_up-pswd-2')" id='sign_up-switch-pswd-2'>Show Password</span>
-            <input type="submit" value="Sign Up">
+            <h2>Sign Up</h2>
+            <div class="row">
+                <input type="text" required placeholder="First Name" autofocus name="sign_up-fname">
+                <input type="text" placeholder="Last Name" name="sign_up-lname">
+            </div>
+            <div class="row">
+                <input type="email" required placeholder="Email" name="sign_up-email">
+                <input type="text" required pattern="[0-9]{10}" title="Please Enter your 10 digit Phone Number"placeholder="Phone" name="sign_up-phone">
+            </div>
+            <div class="row">
+                <div class="pswd">
+                    <input type="password" required pattern=".{8,}" title="Password should contain atleast 8 characters" placeholder="Password" name="sign_up-pswd-1" id="sign_up-pswd-1" class="signup-pswd">
+                    <span onclick="showPassword('sign_up-pswd-1')" id='sign_up-switch-pswd-1' class="signup-switch-pswd">Show Password</span>
+                </div>
+                <div class="pswd">
+                    <input type="password" required placeholder="Confirm Password" name="sign_up-pswd-2" id="sign_up-pswd-2" class="signup-pswd">
+                    <span onclick="showPassword('sign_up-pswd-2')" id='sign_up-switch-pswd-2' class="signup-switch-pswd">Show Password</span>
+                </div>
+                </div>
+            <input type="submit" value="Sign Up" id="signup-btn">
+            <span id="prompt">Already have an account?</span>
+            <a href="/">Login</a>
         </form>
-        <span>Already have an account?</span>
-        <a href="/">Login</a>
     </body>
 <script src="{{ url_for('static', filename='js/main_script.js')}} "></script>
 </html>
