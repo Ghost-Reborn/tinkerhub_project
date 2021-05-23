@@ -4,7 +4,7 @@
 
     <img src="../static/images/profile_pictures/{{val[6]}}.png">
     <h1>{{ val[1]+' '+val[2] }}</h1>
-    <h3>{{ val[3] }}</h3>
-    <h3>{{ val[4] }}</h3>
+    <a href="mailto:{{val[3]}}">{{ val[3] }}</a>
+    <a href="tel:+91{{val[4]}}">{{ val[4] }}</a>
     
 {% endblock %}
