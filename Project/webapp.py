@@ -471,6 +471,8 @@ def cancel_event():
 def search_event():
     if 'lid' in session:
         s_event_name = request.form['seach_title']
+        if s_event_name.strip() == '':
+            return '''<script>alert("Can't Search Empty");window.location='/home'</script>'''
         home_df = get_home_df()
         home_df = home_df[home_df.title == s_event_name]
         if len(home_df)==0:
@@ -484,6 +486,8 @@ def search_event():
 def search_my_event():
     if 'lid' in session:
         s_event_name = request.form['seach_title']
+        if s_event_name.strip() == '':
+            return '''<script>alert("Can't Search Empty");window.location='/my_events'</script>'''
         my_events_df = get_my_events_df()
         my_events_df = my_events_df[my_events_df.title == s_event_name]
         if len(my_events_df)==0:
