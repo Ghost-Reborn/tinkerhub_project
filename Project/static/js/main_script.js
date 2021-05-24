@@ -31,7 +31,6 @@ function fnShowMenu()
 	{
 		document.getElementById('hamburger').innerHTML = 'Close';
 		document.getElementById('menu_container').style.display = 'block';
-        document.getElementById('content').style.marginTop = '3vh';
 		menu=true;
 	}
 	else
@@ -39,7 +38,6 @@ function fnShowMenu()
 		
 		document.getElementById('hamburger').innerHTML = 'Menu';
 		document.getElementById('menu_container').style.display = 'none';
-        document.getElementById('content').style.marginTop = '10vh';
 		menu=false;
 	}
 	

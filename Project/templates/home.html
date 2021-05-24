@@ -17,16 +17,18 @@
     </datalist>
 
     {% for i in vals %}
-        <a href="/view_event?se_id={{i[0]}}" class="event_card">
+        <a href="/view_event?se_id={{i[0]}}">
+        <div class="event_card">
             <span>{{ i[19] }}</span>
             <img src="../static/images/banners/{{ i[7] }}.png" class="event_banner">
             <h1>{{ i[2] }}</h1>
             <h3>Date: {{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</h3>
             <h3>Time: {{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</h3>
-            <h3>Hosted by: <a href="/view_profile?s_lid={{i[1]}}">{{ i[10] + ' ' + i[11] }}</a></h3>
+            <a href="/view_profile?s_lid={{i[1]}}"><h3>Hosted by: {{ i[10] + ' ' + i[11] }}</h3></a>
+        </div>
         </a>
-        {% endfor %}
+    {% endfor %}
 
-        <a href="/create_event">Create Event</a>
-
+    <a href="/create_event" id="create_event_btn">Create Event</a>
+    
 {% endblock %}

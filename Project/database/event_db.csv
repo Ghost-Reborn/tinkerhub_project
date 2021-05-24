@@ -15,3 +15,5 @@ event_id,host_id,title,date_time,venue,max_participants,description,banner,parti
 12,1,ANOTHER EVENT,2021/05/23-03:10-04:10,Google Meet,30,........,banner,0,0
 13,2,event_title__,2021/05/23-06:20-06:22,YouTube,None,   ???,banner,0,0
 14,1,event_title__0,2021/05/23-12:44-13:45,YouTube,None,!!!,banner,0,0
+15,3,ADITH MAIN,2021/05/24-17:05-17:10,Google Meet,100,ZOUL,1520210524170251,1,None
+16,3,ADITH MAIN,2021/05/24-18:00-18:15,Google Meet,250,zoul,1620210524175832,None,None
