@@ -6,17 +6,46 @@
         'fName', 'lName', 'participants_reg_num', 'participants_reg_name', 'participants_atnd_name',
         'hr_start', 'm_start', 'hr_end', 'm_end', 'live_status'] -->
 
+        <style>
+            #my_event_btns{
+                width: 90vw;
+                margin: 6vh auto 0 auto;
+                display: flex;
+                justify-content: space-around;
+            }
+            a{
+                padding: 3vw;
+                color: white;
+                border-radius: 10px;
+            }
+            #cancel_btn{background: rgb(238,23,0);}
+            #attendance_btn{background: rgb(149,191,21);}
+
+            @media screen and (orientation: landscape)
+            {
+                a{padding: 2vw 3vw;}
+                
+            }
+
+            @media screen and (min-width: 1080px)
+            {
+                a{padding: 1.5vw 3vw;}
+            }
+        </style>
+
     {% for i in vals %}
-        <img src="../static/images/banners/{{ i[7] }}.png">
-        <h1>{{ i[2] }}</h1>
-        <p>{{ i[6] }}</p>
-        <h3>Hosted by: <a href="/view_profile?s_lid={{i[1]}}">{{ i[10] + ' ' + i[11] }}</a></h3>
-        <h3>Venue: {{ i[4] }}</h3>
-        <h3>Date: {{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</h3>
-        <h3>Time: {{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</h3>
-        <h4>Attendees: {{ i[13][0] }}, {{ i[13][1] }}</h4>
-        <a href="/cancel_event?e_id={{ i[0] }}">Cancel Event Registration</a>
-        <a href="/attend_event?e_id={{ i[0] }}">Mark Attendance</a>
+        <img src="../static/images/banners/{{ i[7] }}.png" class="event_banner" style="border-radius: 5px;">
+        <h1 class="event_title">{{ i[2] }}</h1>
+        <p class="event_description">{{ i[6] }}</p>
+        <h3 class="event_details">Hosted by: <a href="/view_profile?s_lid={{i[1]}}">{{ i[10] + ' ' + i[11] }}</a></h3>
+        <h3 class="event_details">Venue: {{ i[4] }}</h3>
+        <h3 class="event_details">Date: {{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</h3>
+        <h3 class="event_details">Time: {{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</h3>
+        <h3 class="event_details">Attendees: {{ i[13][0] }}, {{ i[13][1] }}</h3>
+        <div id="my_event_btns">
+            <a href="/cancel_event?e_id={{ i[0] }}" id="cancel_btn">Cancel Registration</a>
+            <a href="/attend_event?e_id={{ i[0] }}" id="attendance_btn">Mark Attendance</a>
+        </div>
     {% endfor %}
 
 {% endblock %}

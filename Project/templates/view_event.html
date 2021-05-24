@@ -8,15 +8,15 @@
        'm_start', 'hr_end', 'm_end', 'event_fill_status'] -->
 
     {% for i in vals %}
-        <img src="../static/images/banners/{{ i[7] }}.png">
-        <h1>{{ i[2] }}</h1>
-        <p>{{ i[6] }}</p>
-        <h3>Hosted by: <a href="/view_profile?s_lid={{i[1]}}">{{ i[10] + ' ' + i[11] }}</a></h3>
-        <h3>Venue: {{ i[4] }}</h3>
-        <h3>Date: {{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</h3>
-        <h3>Time: {{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</h3>
-        <h4>Attendees: {{ i[13][0] }}, {{ i[13][1] }}</h4>
-        <a href="/register_event?e_id={{ i[0] }}">Register</a>
+        <img src="../static/images/banners/{{i[7]}}.png" class="event_banner" style="border-radius: 5px;">
+        <h1 class="event_title">{{ i[2] }}</h1>
+        <p class="event_description">{{ i[6] }}</p>
+        <h3 class="event_details">Hosted by: <a href="/view_profile?s_lid={{i[1]}}">{{ i[10] + ' ' + i[11] }}</a></h3>
+        <h3 class="event_details">Venue: {{ i[4] }}</h3>
+        <h3 class="event_details">Date: {{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</h3>
+        <h3 class="event_details">Time: {{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</h3>
+        <h3 class="event_details">Attendees: {{ i[13][0] }}, {{ i[13][1] }}</h3>
+        <a href="/register_event?e_id={{i[0]}}" id="create_event_btn" style="color: white;">Register</a>
     {% endfor %}
 
 {% endblock %}

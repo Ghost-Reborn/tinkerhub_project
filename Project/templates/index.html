@@ -9,17 +9,15 @@
     <style>
         html, body{
             height: 100vh;
+            margin: 0;
+            padding: 0;
         }
         body{
             width: 99.9vw;
             height: 50%;
-            margin: 0;
-            padding: 0;
         }
 
-        a{
-            text-decoration: none;
-        }
+        a{text-decoration: none;}
 
         #logo{
             border: 1px solid white;
@@ -86,7 +84,7 @@
 
         #content{
             width: 95vw;
-            margin: 0;
+            margin: auto;
             margin-top: 12vh;
             text-align: center;
             padding-bottom: 5vh;
@@ -167,6 +165,15 @@
             color: rgb(32,91,103);
         }
 
+        .event_title{color: rgb(0,96,255);}
+        .event_description{
+            width: 80vw;
+            margin: 0 7vw 3vh 7vw;
+            text-align: left;
+        }
+        .event_details{color: rgb(32,91,103);}
+        .event_details a{color: rgb(5,191, 206);}
+
         @media screen and (orientation: landscape)
         {
             #logo{
@@ -239,6 +246,12 @@
                 right: 2vw;
                 bottom: 5vh;
             }
+            
+            .event_description{
+                width: 90vw;
+                margin: 0 5vw 3vh 5vw;
+            }
+            .event_details{margin-left: 2.5vw;}
         }
 
         @media screen and (min-width: 1080px)
