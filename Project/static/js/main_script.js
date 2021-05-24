@@ -5,6 +5,8 @@ let pswd_fields = {'login-pswd': [false, 'login-switch-pswd'],
                     'update-pswd-2': [false, 'update-switch-pswd-2'],
                     'update-pswd-3': [false, 'update-switch-pswd-3']};
 
+let menu=false;
+
 function showPassword(pswd_field_name)
 {
     show_pswd = pswd_fields[pswd_field_name][0];
@@ -21,4 +23,24 @@ function showPassword(pswd_field_name)
         crnt_pswd_status.innerHTML = "Show Password";
     }
     pswd_fields[pswd_field_name][0] = !show_pswd;
+}
+
+function fnShowMenu()
+{
+	if(menu==false)
+	{
+		document.getElementById('hamburger').innerHTML = 'Close';
+		document.getElementById('menu_container').style.display = 'block';
+        document.getElementById('content').style.marginTop = '3vh';
+		menu=true;
+	}
+	else
+	{
+		
+		document.getElementById('hamburger').innerHTML = 'Menu';
+		document.getElementById('menu_container').style.display = 'none';
+        document.getElementById('content').style.marginTop = '10vh';
+		menu=false;
+	}
+	
 }
