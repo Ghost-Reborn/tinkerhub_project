@@ -5,9 +5,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Method Not Allowed</title>
+    <style>
+        h1{text-align: center;}
+        a{
+            color: rgb(0,96,255);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        div{margin: 3vh 9vw;}
+        img{
+            width: 80vw;
+        }
+        p{text-align: center;}
+        br{display: none;}
+
+        @media screen and (orientation: landscape)
+        {
+            h1{margin-top: 7vh;}
+            div{
+                width: 80vw;
+                margin-top: 10vh;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+            img{
+                width: 60vh;
+                margin: 0;
+            }
+            br{display: block;}
+        }
+
+        @media screen and (min-width: 1080px)
+        {
+            h1{font-size: 5vw;}
+            p{font-size: 2vw;}
+        }
+    </style>
 </head>
 <body>
-    Method Not Allowed
-    <a href='/'>Login to Continue</a>
+    <h1>Error 405: Method Not Allowed</h1>
+    <div>
+        <img src="{{ url_for('static', filename='images/405.png') }}">
+        <p>You don't have access to this page. <br><a href='/'>Login to Continue</a></p>
+    </div>
 </body>
 </html>

@@ -5,8 +5,88 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Error 404 - Page Not Found</title>
+    <style>
+        body{
+            background-image: url('../static/images/void.jpg');
+            background-repeat: no-repeat;
+            background-size: 100vw 100vh;
+            color: white;
+        }
+        h1{
+            margin-top: 5vh;
+            text-align: center;
+        }
+        a{
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        h3{
+            position: fixed;
+            top: 10vh;
+            right: 15vw;
+            font-size: 7vh;
+        }
+        h2{
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            font-size: 55vw;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #zero{top: 18vh;}
+        #one{
+            top: 48vh;
+            right: 5vw;
+        }
+        p{
+            width: 80vw;
+            margin-top: 70vh;
+            padding: 0 3vw;
+            color: #FFFA;
+        }
+
+        @media screen and (orientation: landscape)
+        {   
+            body{
+                background-image: url('../static/images/black_hole.gif');
+                background-repeat: no-repeat;
+                background-size: 100vw 100vh;
+            }
+            h3{
+                top: 15vh;
+                right: 45vw;
+                left: 45vw;
+            }
+            h2{
+                margin-top: 12vh;
+                position: static;
+                display: inline-block;
+                font-size: 18vw;
+                font-style: "Arial Narrow", Arial, sans-serif;
+                font-weight: 100;
+            }
+            #zero{margin-left: 31vw;}
+            #one{margin-left: 16vw;}
+            p{
+                width: 60vw;
+                margin: 8vh auto 0 auto;
+                text-align: center;
+            }
+        }
+
+        @media screen and (min-width: 1080px)
+        {
+            h1{font-size: 3vw;}
+            h3{margin-top: 3vh;}
+            p{font-size: 2vw;}
+        }
+    </style>
 </head>
 <body>
-    Page Not Found
+    <h1>Page Not Found</h1>
+    <h3>Error</h3>
+    <h2 id="zero">4</h2><h2 id="one">4</h2>
+    <p>There is nothing here. We couldn't find the page you were looking for. Don't worry, try going <a href="javascript:history.back()">back</a> or go to <a href="/home">Home Page</a></p>
 </body>
 </html>
