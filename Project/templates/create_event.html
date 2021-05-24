@@ -1,13 +1,195 @@
 {% extends 'index.html' %}
 {% block body %}
+
+    <style>
+        form{
+            width: 90vw;
+            margin: auto;
+            margin-top: 0vh;
+            display: flex;
+            flex-direction: column;
+        }
+        h2{margin: 0;}
+        form div{
+            display: flex;
+            flex-direction: column;
+        }
+        form div div{
+            display: flex;
+            flex-direction: column;
+        }
+        form div div div{
+            display: flex;
+            flex-direction: row;
+        }
+        input{
+            height: 4.5vh;
+            padding-left: 3vw;
+            background: none;
+            border: 1px solid rgba(32,91,103,0.5);
+            color: rgba(32,91,103);
+            outline: none;
+        }input:focus{
+            background: rgba(255,205,16, 0.05);
+            border: 1px solid rgba(255,205,16, 0.5);
+        }
+        textarea{
+            min-width: 84.9vw;
+            max-width: 84.9vw;
+            height: 12vh;
+            min-height: 10vh;
+            max-height: 16vh;
+            padding-left: 2.5vw;
+            background: none;
+            border: 1px solid rgba(32,91,103,0.5);
+            outline: none;
+        }textarea:focus{
+            background: rgba(255,205,16, 0.05);
+            border: 1px solid rgba(255,205,16, 0.5);
+        }
+        .line{
+            margin-top: 5%;
+        }
+        #create-event-banner{
+            margin-left: 4vw;
+            border: none;
+        }
+        #create-event-date{margin-left: 8vw;}
+        #create-event-time1, #create-event-time2{
+            width: 30vw;
+            margin-left: 8vw;
+        }
+        #create-event-time2{margin-left: 5vw;}
+
+        #buttons{
+            margin-top: 5vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            color: white;
+        }
+        .button{
+            width: 30vw;
+            height: 5vh;
+            padding: 5px;
+            background: rgb(149,191,21);
+            color: white;
+            border: none;
+            border-radius: 7px;
+        }
+        #buttons a{
+            height: 4vh;
+            padding-top: 1vh;
+            padding-bottom: 0;
+            background: rgb(238,23,0);
+        }
+
+        @media screen and (orientation: landscape)
+        {
+            form{
+                width: 90vw;
+            }
+            form div{
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+            form div:first-child{
+                width: 36vw;
+                margin-left: 5vw;
+            }
+            form div:last-child{width: 45vw;}
+            form div div div{
+                display: flex;
+                flex-direction: row;
+            }
+            input{
+                height: 7vh;
+            }
+            textarea{
+                min-width: 30vw;
+                max-width: 30vw;
+                height: 30vh;
+                min-height: 30vh;
+                max-height: 36vh;
+            }
+            #create-event-title{width: 30vw;}
+
+            .line{
+                margin-top: 5%;
+            }
+            form div:last-child .line:first-child{margin-left: 0;}
+            #create-event-banner{
+                width: 100%;
+                margin-left: 0;
+            }
+            #date_line{
+                display: flex;
+                justify-content: flex-start;
+            }
+            #create-event-date{margin-left: 2vw;}
+            #create-event-time1, #create-event-time2{
+                width: 14vw;
+                margin-left: 1.9vw;
+            }
+            #create-event-time2{margin-left: 1vw;}
+
+            #buttons{
+                width: 60vw;
+                margin: 5vh auto 0 auto;
+            }
+            .button{
+                width: 20vw;
+                height: 7vh;
+                padding: 5px;
+            }
+            #buttons a{
+                padding-top: 1vh;
+                padding-bottom: 2vh;
+            }
+        }
+
+        @media screen and (min-width: 1080px)
+        {
+            h2{font-size: 3vw;}
+            form{font-size: 1.25vw;}
+            input{font-size: 1.3vw;}
+            #create-event-venue, #create-event-max_participants{width: 30vw;}
+
+            #buttons{
+                width: 50vw;
+                margin: 3vh auto 0 auto;
+            }
+            .button{
+                width: 15vw;
+                height: 7vh;
+                padding: 5px;
+            }
+            #buttons a{
+                padding-top: 2vh;
+                padding-bottom: 1.5vh;
+            }
+        }
+    </style>
+
     <form method="post", action="/event_created" enctype="multipart/form-data">
-        <input type="text" required placeholder="Title" id="create-event-title" name="create-event-title">
-        <textarea placeholder="Enter description..." required id="create-event-description" name="create-event-description"></textarea>
-        Banner<input type="file" id="create-event-banner" name="create-event-banner">
-        Date<input type="date" required id="create-event-date" name="create-event-date">
-        Time<input type="time" required id="create-event-time1" name="create-event-time1">to<input type="time" required id="create-event-time2" name="create-event-time2">
-        <input type="text" placeholder="Location" required id="create-event-venue" name="create-event-venue">
-        <input type="number" placeholder="Maximum Participants" id="create-event-max_participants" name="create-event-max_participants">
-        <input type="submit" value="Register Event">
+        <h2>Create Event</h2>
+        <div>
+            <div>
+                <input type="text" required placeholder="Title" autofocus id="create-event-title" name="create-event-title" class="line">
+                <textarea placeholder="Enter description..." required id="create-event-description" name="create-event-description" class="line"></textarea>
+                <div class="line">Banner: <input type="file" id="create-event-banner" name="create-event-banner" onclick="alert('Better to choose a landscape image')"></div>
+            </div>
+            <div>
+                <div class="line" id="date_line"> Date: <input type="date" required id="create-event-date" name="create-event-date"></div>
+                <div class="line">Time: <input type="time" required id="create-event-time1" name="create-event-time1">&nbsp&nbsp&nbspto<input type="time" required id="create-event-time2" name="create-event-time2"></div>
+                <input type="text" placeholder="Location" required id="create-event-venue" name="create-event-venue" class="line">
+                <input type="number" placeholder="Maximum Participants" id="create-event-max_participants" name="create-event-max_participants" class="line">
+            </div>
+        </div>
+        <div id="buttons">
+            <a href="/home" class="button">Cancel</a>
+            <input type="submit" value="Register Event" class="button">
+        </div>
     </form>
 {% endblock %}
