@@ -37,7 +37,7 @@
             flex: 1;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(45deg, rgba(5,191, 206, 0.9), rgba(32,91,103, 0.9));
+            background: linear-gradient(160deg, rgba(5,191, 206, 0.9), rgba(32,91,103, 0.9));
         }
         #landscape_nav_btn{
             width: 25vw;
@@ -64,7 +64,7 @@
             display: none;
             padding-top: 8.5vh;
             padding-bottom: 0.5vh;
-            background: linear-gradient(45deg, rgba(0,96,255, 0.9), rgba(32,91,103, 0.9));
+            background: linear-gradient(45deg, rgba(0,96,255, 0.9), rgb(5,191,206));
             text-align: center;
         }
         #menu{
@@ -80,6 +80,7 @@
         #content{
             width: 95vw;
             margin: 10vh auto 0 auto;
+            text-align: center;
         }
 
         .search_div{
@@ -89,13 +90,13 @@
             justify-content: space-around;
             text-align: center;
         }
-        .seach_title{
+        .search_title{
             width: 66%;
             height: 4vh;
             padding-left: 2%;
             border: 1px solid rgba(32,91,103, 0.7);
             outline: none;
-        }.seach_title:focus{
+        }.search_title:focus{
             background: rgba(255,205,16, 0.1);
             border: 1px solid rgb(255,205,16);
         }
@@ -143,12 +144,37 @@
             #content{
                 margin-top: 15vh;
             }
+
+            .search_div{
+                width: 60%;
+            }
+            .search_title{
+                width: 60%;
+                height: 7vh;
+                border-radius: 3px;
+            }
+            .search_btn{
+                width: 25%;
+                height: 7vh;
+                border-radius: 7px;
+            }
         }
 
         @media screen and (min-width: 1080px)
         {
-            #logo{
-                width: 7%;
+            #logo{width: 7%;}
+            
+            .search_div{
+                width: 45%;
+                justify-content: space-between;
+            }
+            .search_title{
+                width: 75%;
+                border-radius: 20px;
+            }
+            .search_btn{
+                width: 20%;
+                border-radius: 25px;
             }
         }
     </style>
