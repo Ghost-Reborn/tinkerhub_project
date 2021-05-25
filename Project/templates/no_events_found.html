@@ -15,7 +15,7 @@
             padding: 0;
             text-align: center;
         }
-        a{
+        #go_to_home{
             margin-top: 2vh;
             display: block;
             color: rgb(0,96,255);
@@ -39,7 +39,7 @@
                 top: 50vh;
                 left: 15vw;
             }
-            a{
+            #go_to_home{
                 position: fixed;
                 top: 60vh;
                 left: 20vw;
@@ -62,7 +62,7 @@
                 left: 15vw;
                 font-size: 3.6vh;
             }
-            a{
+            #go_to_home{
                 top: 55vh;
                 left: 17vw;
                 font-size: 4vh;
@@ -73,7 +73,7 @@
     <h1>There are no events</h1>
     <img src="{{ url_for('static', filename='images/assets/no_events.png') }}" id="no_event">
     <h3>Try Again Later</h3>
-    <a href="javascript:history.back()">Go Back</a>
+    <a href="/home" id="go_to_home">Go to Home</a>
 
 {% endblock %}
     
