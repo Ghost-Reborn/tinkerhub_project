@@ -84,7 +84,7 @@ def get_joined_df():
 #getting home datadrame
 def get_home_df():
     joined_df = get_joined_df()
-    home_df = joined_df[joined_df.host_id != session['lid']]
+    home_df = joined_df[joined_df.host_id != np.int64(session['lid'])]
     current_dt = datetime.now().strftime('%Y%m%d%H%M')
     upcomming_list = []
     for i in home_df.event_id:
@@ -92,13 +92,14 @@ def get_home_df():
         upcomming_list.append(dt[:4]+dt[5:7]+dt[8:10]+dt[11:13]+dt[14:16]>current_dt)
     home_df = home_df[upcomming_list]
     in_my_list = []
-    for i in home_df.event_id:
-        participants_reg_list = home_df.participants_reg[home_df.event_id == i].tolist()[0]
-        if participants_reg_list != 'None':
-            in_my_list.append(not str(session['lid']) in participants_reg_list.split())
-        else:
-            in_my_list.append(True)
-    home_df = home_df[in_my_list]
+    if len(home_df != 0):
+        for i in home_df.event_id:
+            participants_reg_list = home_df.participants_reg[home_df.event_id == i].tolist()[0]
+            if participants_reg_list != 'None':
+                in_my_list.append(not str(session['lid']) in participants_reg_list.split())
+            else:
+                in_my_list.append(True)
+        home_df = home_df[in_my_list]
     return home_df
 
 #getting my events dataframe
@@ -323,7 +324,7 @@ def signing_up():
         user_db = user_db.append(data, ignore_index=True, sort=False)
         user_db.to_csv('database/user_db.csv', index=False)
         user_db = pd.read_csv('database/user_db.csv')
-        return '''<script>alert('Signing Up');window.location='/'</script>'''
+        return '''<script>alert('Sign Up Successful');window.location='/'</script>'''
     else:
         return '''<script>alert('Error');window.location='/sign_up'</script>'''
 
@@ -511,7 +512,7 @@ def update_profile():
         user_db.at[user_db.login_id == session['lid'], 'phone'] = update_phone
         user_db.to_csv('database/user_db.csv', index=False)
         user_db = pd.read_csv('database/user_db.csv')
-        return '''<script>alert('Profile Updated');window.location='/profile'</script>'''
+        return '''<script>window.location='/profile'</script>'''
     else:
         return render_template('method_not_allowed.html')
 
@@ -548,7 +549,7 @@ def update_dp():
         user_db.at[user_db.login_id == session['lid'], 'profile_pic'] = update_dp_img_name
         user_db.to_csv('database/user_db.csv', index=False)
         user_db = pd.read_csv('database/user_db.csv')
-        return '''<script>alert('Profile Picture Updated');window.location='/profile'</script>'''
+        return '''<script>window.location='/profile'</script>'''
     else:
         return render_template('method_not_allowed.html')
 
