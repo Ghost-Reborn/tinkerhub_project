@@ -1,5 +1,79 @@
 {% extends 'index.html' %}
 {% block body %}
-No Events Found
+
+    <style>
+        h1{
+            margin-top: 20vh;
+            color: rgb(32,91,103);
+        }
+        #no_event{
+            width: 60vw;
+            margin-top: 3vh;
+        }
+        h3{
+            margin-top: 3vh;
+            padding: 0;
+            text-align: center;
+        }
+        a{
+            margin-top: 2vh;
+            display: block;
+            color: rgb(0,96,255);
+            font-weight: 600;
+        }
+
+        @media screen and (orientation: landscape)
+        {
+            h1{
+                position: fixed;
+                top: 15vh;
+                left: 3vw;
+            }
+            #no_event{
+                position: fixed;
+                width: 36vw;
+                right: 10vw;
+            }
+            h3{
+                position: fixed;
+                top: 50vh;
+                left: 15vw;
+            }
+            a{
+                position: fixed;
+                top: 60vh;
+                left: 20vw;
+            }
+        }
+
+        @media screen and (min-width: 1080px)
+        {
+            h1{
+                left: 7vw;
+                font-size: 7vh;
+            }
+            #no_event{
+                width: 28vw;
+                top: 22vh;
+                right: 13vw;
+            }
+            h3{
+                top: 48vh;
+                left: 15vw;
+                font-size: 3.6vh;
+            }
+            a{
+                top: 55vh;
+                left: 17vw;
+                font-size: 4vh;
+            }
+        }
+    </style>
+
+    <h1>There are no events</h1>
+    <img src="{{ url_for('static', filename='images/assets/no_events.png') }}" id="no_event">
+    <h3>Try Again Later</h3>
+    <a href="javascript:history.back()">Go Back</a>
+
 {% endblock %}
     

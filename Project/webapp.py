@@ -555,7 +555,7 @@ def update_dp():
 #handling error 404
 @app.errorhandler(404)
 def error_404(e):
-    return render_template('page_notfound.html')
+    return render_template('page_not_found.html')
 
 #handling error 405
 @app.errorhandler(405)
