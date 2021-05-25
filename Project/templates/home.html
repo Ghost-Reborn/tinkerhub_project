@@ -1,5 +1,14 @@
 {% extends 'index.html' %}
 {% block body %}
+
+    <style>
+        #create_event_btn{transition: 0.4s;}#create_event_btn:hover{
+            font-size: 110%;
+            transform: scaleX(0.8);
+            border-radius: 100%;
+        }
+    </style>
+
     <form method="post" action="/search_event" class="search_div">
         <input type="search" placeholder="Search Upcomming Event" list="events" class="search_title" name="search_title">
         <input type="submit" value="Search" class="search_btn">
