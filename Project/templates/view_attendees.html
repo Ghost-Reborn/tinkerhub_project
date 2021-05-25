@@ -2,17 +2,46 @@
 {% block body %}
 
     <style>
-        
+        h1{color: rgb(0,96,255);}
+        #event_details{
+            display: flex;
+            margin-bottom: 5vh;
+            flex-direction: column;
+            color: rgb(32,91,103);
+            align-items: center;
+        }
+        ul a{
+            color: black;
+            text-align: left;
+        }ul a:hover{font-weight: 600;}
+
+        @media screen and (orientation: landscape)
+        {
+            h1{font-size: 6vw;}
+            #event_details{
+                padding: 0 10%;
+                flex-direction: row;
+                justify-content: space-around;
+            }
+        }
+
+        @media screen and (min-width: 1080px)
+        {
+            h1{font-size: 4.2vw;}
+            #event_details{font-size: 1.6vw;}
+            ul{font-size: 1.3vw;}
+        }
     </style>
 
     <h1>{{ event[2] }}</h1>
-    <h3>{{ event[10] + ' ' + event[11] }}</h3>
-    <h3>{{ event[3][8:10]+'/'+event[3][5:7]+'/'+event[3][:4] }}</h3>
-    <h3>{{ event[15]+':'+event[3][14:16]+' '+event[16]+' to '+event[17]+':'+event[3][20:22]+' '+event[18] }}</h3>
-
+    <div id="event_details">
+        <h3>{{ event[10] + ' ' + event[11] }}</h3>
+        <h3>{{ event[3][8:10]+'/'+event[3][5:7]+'/'+event[3][:4] }}</h3>
+        <h3>{{ event[15]+':'+event[3][14:16]+' '+event[16]+' to '+event[17]+':'+event[3][20:22]+' '+event[18] }}</h3>
+    </div>
     <ul>
     {% for i in val %}
-        <li><a href="/view_profile?s_lid={{i[0]}}">{{ i[1] }}</a></li>
+        <a href="/view_profile?s_lid={{i[0]}}" class="profile"><li>{{ i[1] }}</li></a>
     {% endfor %}
     </ul>
 
