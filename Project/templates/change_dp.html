@@ -1,9 +1,52 @@
 {% extends 'index.html' %}
 {% block body %}
 
+    <style>
+        form{
+            width: 60%;
+            height: 25vh;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+        #update_dp_btn{
+            width: 50vw;
+            height: 5vh;
+            background: rgb(0,96,255);
+            color: white;
+            font-size: 4vw;
+            border-radius: 10px;
+            border: 0;
+        }
+
+        @media screen and (orientation: landscape)
+        {
+            #content{padding-top: 10vh;}
+            form{
+                width: 80%;
+                flex-direction: row;
+            }
+            #update_dp_btn{
+                width: 26vw;
+                height: 7vh;
+                font-size: 1.8vw;
+            }
+        }
+
+        @media screen and (min-width: 1080px)
+        {
+            #update_dp_btn{
+                width: 20vw;
+                height: 7vh;
+                font-size: 1.4vw;
+            }
+        }
+    </style>
+
     <form method="post", action="/update_dp" enctype="multipart/form-data">
         <input type="file" required id="update-dp" name="update-dp">
-        <input type="submit" value="Update Password">
+        <input type="submit" value="Update Profile Picture" id="update_dp_btn">
     </form>
 
 
