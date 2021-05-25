@@ -189,7 +189,8 @@
             </div>
             <div class="row">
                 <div class="pswd">
-                    <input type="password" required pattern=".{8,}" title="Password should contain atleast 8 characters" placeholder="Password" name="sign_up-pswd-1" id="sign_up-pswd-1" class="signup-pswd">
+                    <input type="password" required pattern="(?=.*[0-9])(?=.*[A-Za-z])\S{8,}"
+                        title="Password should contain atleast 8 characters including 1 number and a letter" placeholder="Password" name="sign_up-pswd-1" id="sign_up-pswd-1" class="signup-pswd">
                     <span onclick="showPassword('sign_up-pswd-1')" id='sign_up-switch-pswd-1' class="signup-switch-pswd">Show Password</span>
                 </div>
                 <div class="pswd">
