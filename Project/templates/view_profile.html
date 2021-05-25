@@ -2,9 +2,35 @@
 {% block body %}
 <!-- ['login_id', 'fName', 'lName', 'email', 'phone', 'password', 'profile_pic', 'events_reg', 'events_atnd', 'events_host'] -->
 
-    <img src="../static/images/profile_pictures/{{val[6]}}.png">
-    <h1>{{ val[1]+' '+val[2] }}</h1>
-    <a href="mailto:{{val[3]}}">{{ val[3] }}</a>
-    <a href="tel:+91{{val[4]}}">{{ val[4] }}</a>
-    
+    <style>
+        #profile_details{
+            margin-top: 1vh;
+            display: flex;
+            flex-direction: column;
+        }
+        #profile_email, #profile_phn{
+            margin-top: 2vh;
+            padding: 0;
+            color: rgb(32,91,103);
+            text-align: center;
+        }
+
+        @media screen and (orientation: landscape)
+        {
+            #profile_details{
+                margin-top: 10vh;
+                flex-direction: row;
+                justify-content: space-around;
+                font-size: 2vw;
+            }
+        }
+    </style>
+
+    <img src="../static/images/profile_pictures/{{val[6]}}.png" id="dp">
+    <h1 id="profile_name">{{ val[1]+' '+val[2] }}</h1>
+    <div id="profile_details">
+        <a href="mailto:{{val[3]}}" id="profile_email">{{ val[3] }}</a>
+        <a href="tel:+91{{val[4]}}" id="profile_phn">{{ val[4] }}</a>
+    </div>
+
 {% endblock %}

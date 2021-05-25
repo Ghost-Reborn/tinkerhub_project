@@ -2,15 +2,60 @@
 {% block body %}
 <!-- ['login_id', 'fName', 'lName', 'email', 'phone', 'password', 'profile_pic', 'events_reg', 'events_atnd', 'events_host'] -->
 
-    <a href="/change_dp"><img src="../static/images/profile_pictures/{{val[6]}}.png"></a>
-    <h1>{{ val[1]+' '+val[2] }}</h1>
-    <h3>{{ val[3] }}</h3>
-    <h3>{{ val[4] }}</h3>
+    <style>
+        table{
+            width: 100%;
+            margin-top: 5vh;
+            border: 1px solid rgb(32,91,103);
+            border-collapse: collapse;
+            text-align: left;
+        }
+        caption{
+            margin-bottom: 1vh;
+            color: rgb(0,96,255);
+            font-size: 5vw;
+            font-weight: 600;
+        }
+        th{
+            padding: 1vh 0;
+            background: rgb(5,191,206);
+            text-align: center;
+        }
+        td{color: rgb(32,91,103);}
+        .view{text-align: center;}
+        table a{
+            color: rgb(149,191,21);
+            font-weight: 600;
+        }
+        
 
-    <a href="/edit_profile">Update Profile</a>
-    <a href="/change_pswd">Change Password</a>
+        @media screen and (orientation: landscape)
+        {
+            table{
+                margin-top: 10vh;
+                text-align: left;
+            }
+            caption{
+                margin-bottom: 1vh;
+                font-size: 3vw;
+            }
+            td{padding: 1% 0;}
+        }
+    </style>
 
-    <table>
+    <a href="/change_dp"><img src="../static/images/profile_pictures/{{val[6]}}.png" id="dp"></a>
+    <h1 id="profile_name">{{ val[1]+' '+val[2] }}</h1>
+    <div id="profile_details">
+        <h3 id="profile_email">{{ val[3] }}</h3>
+        <h3 id="profile_phn">{{ val[4] }}</h3>
+    </div>
+
+    <div id="profile_links">
+        <a href="/edit_profile">Update Profile</a>
+        <a href="/change_pswd">Change Password</a>
+    </div>
+
+    <table border="1">
         <caption>Events Attended</caption>
         <tr>
             <th>Title</th>
@@ -27,12 +72,12 @@
             <td>{{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</td>
             <td><a href="/view_profile?s_lid={{i[1]}}">{{ i[10] + ' ' + i[11] }}</a></td>
             <td>{{ i[4] }}</td>
-            <td><a href="/view_participants?e_id={{i[0]}}">View</a></td>
+            <td class="view"><a href="/view_participants?e_id={{i[0]}}">View</a></td>
         </tr>
         {% endfor %}
     </table>
 
-    <table>
+    <table border="1">
         <caption>Events Hosted</caption>
         <tr>
             <th>Title</th>
@@ -47,7 +92,7 @@
             <td>{{ i[3][8:10]+'/'+i[3][5:7]+'/'+i[3][:4] }}</td>
             <td>{{ i[15]+':'+i[3][14:16]+' '+i[16]+' to '+i[17]+':'+i[3][20:22]+' '+i[18] }}</td>
             <td>{{ i[4] }}</td>
-            <td><a href="/view_participants?e_id={{i[0]}}">View</a></td>
+            <td class="view"><a href="/view_participants?e_id={{i[0]}}">View</a></td>
         </tr>
         {% endfor %}
     </table>

@@ -173,6 +173,46 @@
         }
         .event_details{color: rgb(32,91,103);}
         .event_details a{color: rgb(5,191, 206);}
+        
+        .profile:hover{color: rgb(5,191, 206);}
+
+        #dp{
+            width: 15vh;
+            height: 15vh;
+            padding: 2vw;
+            border-top: 7px solid rgb(255,205,16);
+            border-right: 5px solid rgb(238,23,0);
+            border-left: 3px solid rgb(5,191,206);
+            border-bottom: 2px solid rgb(149,191,21);
+            border-radius: 100%;
+        }
+
+        #profile_name{
+            margin: 0;
+            color: rgb(0,96,255);
+        }
+        #profile_details{
+            display: flex;
+            flex-direction: column;
+            color: rgb(32,91,103);
+        }
+        #profile_email, #profile_phn{
+            padding-left: 0;
+            text-align: center;
+        }
+
+        #profile_links{
+            margin: 3vh auto 0 auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        #profile_links a{
+            padding: 1.25vh 5vw;
+            background: rgb(0,96,255);
+            color: white;
+            border-radius: 10px;
+        }
 
         @media screen and (orientation: landscape)
         {
@@ -252,6 +292,29 @@
                 margin: 0 5vw 3vh 5vw;
             }
             .event_details{margin-left: 2.5vw;}
+
+            #dp{
+                width: 15vw;
+                height: 15vw;
+                margin-bottom: 4vh;
+                padding: 1vw;
+            }
+            #profile_details{
+                margin-top: 5.5vh;
+                flex-direction: row;
+                justify-content: space-around;
+                font-size: 2vw;
+            }
+
+            #profile_links{
+                width: 85vw;
+                margin-top: 7vh;
+            }
+            #profile_links a{
+                padding: 2vh 4vw;
+                border-radius: 10px;
+                font-size: 2vw;
+            }
         }
 
         @media screen and (min-width: 1080px)
@@ -306,8 +369,8 @@
         <div id="landscape_nav_btn">
             <button id=hamburger onClick=fnShowMenu()>Menu</button>
             <a href="/home">Home</a>
-            <a href="/my_events" style="margin-top: 0;">My<br>Events</a>
-            <a href="/profile">Profile</a>
+            <a href="/my_events">My Events</a>
+            <a href="/profile">My Profile</a>
             <a href="/logout">Logout</a>
         </div>
     </nav>
@@ -315,7 +378,7 @@
         <div id=menu>
             <a href=/home>Home</a>
             <a href="/my_events">My Events</a>
-            <a href="/profile">Profile</a>
+            <a href="/profile">My Profile</a>
             <a href="/logout">Logout</a>
         </div>
     </div>
