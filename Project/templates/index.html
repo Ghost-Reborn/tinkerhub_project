@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ url_for('static', filename='css/main_style.css') }}" rel="stylesheet">
+    <link rel="shortcut icon"  type=image/x-icon href="{{ url_for('static', filename='images/assets/logo.png') }}">
     <title>Event Manager</title>
     <style>
         html, body{
@@ -20,8 +21,7 @@
         a{text-decoration: none;}
 
         #logo{
-            border: 1px solid white;
-            width: 15%;
+            width: 12%;
             height: 90%;
             margin-left: 3%;
         }
@@ -218,7 +218,7 @@
         @media screen and (orientation: landscape)
         {
             #logo{
-                width: 8%;
+                width: 7%;
             }
 
             nav{
@@ -324,7 +324,7 @@
 
         @media screen and (min-width: 1080px)
         {
-            #logo{width: 7%;}
+            #logo{width: 5%;}
             
             .search_div{
                 width: 45%;
@@ -380,7 +380,7 @@
 </head>
 <body>
     <nav>
-        <img id="logo"></img>
+        <img id="logo" src="{{ url_for('static', filename='images/assets/logo.png') }}"></img>
         <div id="landscape_nav_btn">
             <button id=hamburger onClick=fnShowMenu()>Menu</button>
             <a href="/home">Home</a>
