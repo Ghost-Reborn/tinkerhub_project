@@ -1,0 +1,3 @@
+login_id,fName,lName,email,phone,password,profile_pic,events_reg,events_atnd,events_host
+0,ADMIN,ADMIN,admin@admin.admin,123456789,0,None,1 2,2 1,0
+1,Abhinand,A,test@gmail.com,8138977331,TestPass1,None,None,None,1 2

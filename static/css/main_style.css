@@ -1,0 +1,370 @@
+
+        html, body{
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            width: 99.9vw;
+            height: 50%;
+        }
+
+        a{text-decoration: none;}
+
+        #logo{
+            border: 1px solid white;
+            width: 15%;
+            height: 90%;
+            margin-left: 3%;
+        }
+
+        nav{
+            height: 8vh;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 3;
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(160deg, rgb(5,191, 206), rgb(32,91,103));
+        }
+        #landscape_nav_btn{
+            width: 25vw;
+            height: 100%;
+            display: flex;
+        }
+        #landscape_nav_btn button{
+            width: 100%;
+            padding: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 3vh;
+            font-weight: 500;
+        }
+        #landscape_nav_btn a{
+            padding: 2.5vh 0;
+            display: none;
+            color: white;
+            font-size: 3vh;
+            font-weight: 500;
+        }
+        #menu_container{
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 2;
+            padding-top: 8.5vh;
+            padding-bottom: 0.5vh;
+            background: linear-gradient(45deg, rgba(0,96,255, 0.9), rgb(5,191,206));
+            text-align: center;
+        }
+        #menu{
+            display: flex;
+            flex-direction: column;
+        }
+        #menu a{
+            height: 3vh;
+            padding: 1vh 10vw;
+            color: white;
+        }
+
+        #content{
+            width: 95vw;
+            margin: auto;
+            margin-top: 12vh;
+            text-align: center;
+            padding-bottom: 5vh;
+        }
+
+        .search_div{
+            width: 95%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .search_title{
+            width: 66%;
+            height: 4vh;
+            padding-left: 2%;
+            border: 1px solid rgba(32,91,103, 0.7);
+            outline: none;
+        }.search_title:focus{
+            background: rgba(255,205,16, 0.1);
+            border: 1px solid rgb(255,205,16);
+        }
+        .search_btn{
+            width: 25%;
+            height: 4vh;
+            background: rgb(0,96,255);
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .event_card_link{display: block;}
+        .event_card{
+            width: 80vw;
+            margin: 5vh auto 8vh auto;
+            padding-bottom: 3vh;
+            border-radius: 10px;
+            box-shadow: 3px 3px 16px rgba(32,91,103, 0.6);
+        }
+        .event_card span{
+            padding: 0.5vh 1.5vh;
+            position: absolute;
+            right: 10vw;
+            z-index: 1;
+            background: #000C;
+            color: white;
+            font-size: 4vw;
+            border-radius: 0 3px 0px 5px;
+        }
+        .event_banner{width: 80vw;}
+        .event_card h1, h3{
+            margin: 0;
+            padding-top: 1.75vh;
+            padding-left: 7vw;
+            text-align: left;
+        }
+        .event_card h1{color: rgb(32,91,103);}
+        .event_card h3{
+            color: black;
+            font-size: 4vw;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        #create_event_btn{
+            width: 40vw;
+            padding: 1.5vh 0;
+            position: fixed;
+            right: 30vw;
+            bottom: 4vh;
+            background: rgb(149,191,21);
+            color: rgb(32,91,103);
+            font-weight: 600;
+            border-radius: 20px;
+            z-index: 4;
+        }#create_event_btn:hover{
+            background: rgb(255,205,16);
+            color: rgb(32,91,103);
+        }
+
+        .event_title{color: rgb(0,96,255);}
+        .event_description{
+            width: 80vw;
+            margin: 0 7vw 3vh 7vw;
+            text-align: left;
+        }
+        .event_details{color: rgb(32,91,103);}
+        .event_details a{color: rgb(5,191, 206);}
+        
+        .profile:hover{color: rgb(5,191, 206);}
+
+        #dp{
+            width: 15vh;
+            height: 15vh;
+            padding: 2vw;
+            border-top: 7px solid rgb(255,205,16);
+            border-right: 5px solid rgb(238,23,0);
+            border-left: 3px solid rgb(5,191,206);
+            border-bottom: 2px solid rgb(149,191,21);
+            border-radius: 100%;
+        }
+
+        #profile_name{
+            margin: 0;
+            color: rgb(0,96,255);
+        }
+        #profile_details{
+            display: flex;
+            flex-direction: column;
+            color: rgb(32,91,103);
+        }
+        #profile_email, #profile_phn{
+            padding-left: 0;
+            text-align: center;
+        }
+
+        #profile_links{
+            margin: 3vh auto 0 auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        #profile_links a{
+            width: 40vw;
+            padding: 1vh 0;
+            background: rgb(0,96,255);
+            color: white;
+            border-radius: 10px;
+        }
+
+        @media screen and (orientation: landscape)
+        {
+            #logo{
+                width: 8%;
+            }
+
+            nav{
+                height: 12vh;
+            }
+
+            #landscape_nav_btn{
+                width: 40vw;
+                margin-right: 1vw;
+            }
+            #landscape_nav_btn button{
+                display: none;                
+            }
+            #landscape_nav_btn a{
+                width: 25%;
+                margin-top: 1.2vh;
+                display: block;
+                text-align: center;
+                font-size: 1.75vw;
+            }
+
+            #content{
+                margin-top: 18vh;
+            }
+
+            .search_div{
+                width: 60%;
+            }
+            .search_title{
+                width: 60%;
+                height: 7vh;
+                border-radius: 3px;
+            }
+            .search_btn{
+                width: 25%;
+                height: 7vh;
+                border-radius: 7px;
+            }
+            
+            .event_card{
+                width: 60vw;
+                margin: 10vh auto 16vh auto;
+                padding-bottom: 5vh;
+                box-shadow: 1px 1px 20px rgba(32,91,103, 0.8);
+            }
+            .event_card span{
+                padding: 0.5vh 3vw;
+                right: 20vw;
+                font-size: 2vw;
+                border-radius: 0 10px 0px 10px;
+            }
+            .event_banner{
+                width: 60vw;
+                border-radius: 10px 10px 0 0;
+            }
+            .event_card h1, h3{
+                padding-top: 1.25vh;
+                padding-left: 3vw;
+            }
+            .event_card h1{font-size: 3.2vw;}
+            .event_card h3{font-size: 2vw;}
+
+            #create_event_btn{
+                width: 12vw;
+                padding: 2.5vh 1vw;
+                right: 2vw;
+                bottom: 5vh;
+            }
+            
+            .event_description{
+                width: 90vw;
+                margin: 0 5vw 3vh 5vw;
+            }
+            .event_details{margin-left: 2.5vw;}
+
+            #dp{
+                width: 15vw;
+                height: 15vw;
+                margin-bottom: 4vh;
+                padding: 1vw;
+                border-top: 1.5vw solid rgb(255,205,16);
+                border-right: 1vw solid rgb(238,23,0);
+                border-left: 0.8vw solid rgb(5,191,206);
+                border-bottom: 0.5vw solid rgb(149,191,21);
+            }
+            #profile_details{
+                margin-top: 5.5vh;
+                flex-direction: row;
+                justify-content: space-around;
+                font-size: 2vw;
+            }
+            #profile_links{
+                width: 85vw;
+                margin-top: 7vh;
+            }
+            #profile_links a{
+                width: 20vw;
+                padding: 2vh 0;
+                border-radius: 10px;
+                font-size: 2vw;
+            }
+        }
+
+        @media screen and (min-width: 1080px)
+        {
+            #logo{width: 7%;}
+            
+            .search_div{
+                width: 45%;
+                justify-content: space-between;
+            }
+            .search_title{
+                width: 75%;
+                border-radius: 20px;
+            }
+            .search_btn{
+                width: 20%;
+                border-radius: 25px;
+            }
+            
+            .event_card{
+                width: 80vw;
+                margin-bottom: 15vh;
+                padding-bottom: 8vh;
+            }
+            .event_card span{
+                padding: 1.5vh 2vw;
+                right: 8.8vw;
+                font-size: 1.5vw;
+            }
+            .event_banner{width: 80vw;}
+            .event_card h1, h3{
+                padding-top: 1.25vh;
+                padding-left: 3vw;
+            }
+            .event_card h1{
+                padding-top: 1.75vh;
+                font-size: 3vw;
+            }
+            .event_card h3{font-size: 1.5vw;}
+
+            #create_event_btn{
+                padding: 1.8vh 0;
+                right: 5vw;
+                bottom: 7vh;
+            }
+
+            #profile_name{font-size: 3vw;}
+            #dp{padding: 0.5%;}
+            #profile_details{font-size: 1.3vw;}
+            #profile_links a{
+                width: 12.5vw;
+                padding: 1vh 0;
+                font-size: 1.25vw;
+            }
+
+        }

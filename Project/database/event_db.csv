@@ -1,2 +1,0 @@
-event_id,host_id,title,date_time,venue,max_participants,description,banner,participants_reg,participants_atnd
-0,0,EVENT,2000/01/01-00:00-00:00,Some Where,0,"This is an empty event",banner,None,None
