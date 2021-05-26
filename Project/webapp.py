@@ -170,26 +170,32 @@ def home():
 #view event page route
 @app.route('/view_event')
 def view_event():
-    selected_eid = request.args.get('se_id')
-    joined_df = get_joined_df()
-    selected_event = joined_df[joined_df.event_id == np.int64(selected_eid)]
-    if (selected_event.event_fill_status == 'Filled').tolist()[0]:
-        return '''<script>alert('This Event is Full');window.location='/home'</script>'''
-    return render_template('view_event.html', vals = selected_event.to_numpy())
+    if 'lid'in session:
+        selected_eid = request.args.get('se_id')
+        joined_df = get_joined_df()
+        selected_event = joined_df[joined_df.event_id == np.int64(selected_eid)]
+        if (selected_event.event_fill_status == 'Filled').tolist()[0]:
+            return '''<script>alert('This Event is Full');window.location='/home'</script>'''
+        return render_template('view_event.html', vals = selected_event.to_numpy())
+    else:
+        return render_template('method_not_allowed.html')
 
 #view event page route
 @app.route('/view_my_event')
 def view_my_event():
-    selected_eid = request.args.get('se_id')
-    my_events_df = get_my_events_df()
-    selected_event = my_events_df[my_events_df.event_id == np.int64(selected_eid)]
-    return render_template('view_my_event.html', vals = selected_event.to_numpy())
+    if 'lid' in session:
+        selected_eid = request.args.get('se_id')
+        my_events_df = get_my_events_df()
+        selected_event = my_events_df[my_events_df.event_id == np.int64(selected_eid)]
+        return render_template('view_my_event.html', vals = selected_event.to_numpy())
+    else:
+        return render_template('method_not_allowed.html')
 
 #create event page route
 @app.route('/create_event')
 def create_event():
     if 'lid' in session:
-      return render_template('create_event.html')
+          return render_template('create_event.html')
     else:
         return render_template('method_not_allowed.html')
 
